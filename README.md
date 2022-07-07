@@ -15,11 +15,14 @@
  
 **2.后端**
  - 核心框架:SpringBoot 2.7.0+MybatisPlus
- - 数据库:mysqk、redis
  - 项目构建:jdk1.8、maven 3
  - 模板引擎:thymeleaf
  - 分页插件:PageHelper
  - 登录加密:MD5
  - 开发工具:IDEA  
  - 运行环境:腾讯云 Centos7 轻量应用服务器2核2G
+
+**3.数据库**
+ - mysql
+ - redis
  
