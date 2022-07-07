@@ -51,3 +51,5 @@
 评论表：t_comment
 \
 博客标签关联表:t_blog_tag_relation
+\
+**表sql文件也上传了**
