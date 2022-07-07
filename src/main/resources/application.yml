@@ -1,0 +1,64 @@
+#数据源配置
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://localhost:3306/blog?useSSL=false&serverTimezone=GMT%2B8
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: 数据库账号
+      password: 数据库密码
+
+#视图解析器配置
+  mvc:
+    view:
+      prefix: classpath*:/templates/
+      suffix: .html
+      #开启restful
+    hiddenmethod:
+      filter:
+        enabled: true
+
+#评论邮件回复配置
+  mail:
+    default-encoding: utf-8
+# 主机地址
+    host: smtp.163.com
+# 邮箱名
+    username: 你的邮箱地址
+# 授权码（不是密码）
+    password: 你的邮箱授权码
+# redis配置
+  redis:
+    host: 部署redis的Ip地址
+    port: 6379
+    database: 0
+    lettuce:
+      pool:
+        max-active: 100
+        max-wait: 1
+        max-idle: 10
+        min-idle: 0
+    timeout: 1000
+#    password: redis如果有密码就设置
+
+#mybatis-plus配置
+mybatis-plus:
+  configuration:
+    #添加日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:mapper/*.xml
+#mybatis分页插件配置
+pagehelper:
+  #设置参数合理化
+  reasonable: true
+
+#日志配置
+logging:
+  lever:
+    root: info
+    com.heshijia: debug
+  #配置日志文件存放路径
+  file:
+    path: log/blog/
+
+
+

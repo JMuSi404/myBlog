@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title th:replace="${title}"></title>
+    <link rel="stylesheet"  th:href="@{/css/animate.css}" />
+    <link rel="stylesheet"  th:href="@{/css/layui.css}">
+    <link rel="stylesheet"  th:href="@{/lib/Semantic-UI-CSS-master/semantic.css}">
+    <link rel="stylesheet"  th:href="@{/css/Blog-nav.css}">
+    <link rel="stylesheet"  th:href="@{/lib/editorMd/css/editormd.min.css}" >
+    <link rel="stylesheet"  th:href="@{/css/indexStyle.css}">
+    <style>
+        body{
+            background-color: #f5f5f5;
+        }
+        .h-body-bottom {
+            margin-top: 66px;
+        }
+        .h-boder-radius {
+            border-radius: 10px !important;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 导航 -->
+<div class="ui top  menu" th:fragment="top">
+    <nav class="ui attached segment h-padded-td-mini h-shadow-small">
+        <!-- 滚轮进度条 -->
+        <div class="ui bottom indicating attached  progress" data-value="1" data-total="100" id="example4">
+            <div class="bar"></div>
+        </div>
+        <div class="ui secondary stackable menu ">
+            <h2 class="ui header item">
+                <div class="content"><span>博客管理</span></div>
+            </h2>
+            <a th:href="@{/admin/toBlogs}" class="h-item item h-moblile-hide"><i class="address book outline icon"></i>博客</a>
+            <a th:href="@{/admin/toTags}" class="h-item item h-moblile-hide"><i class="tags icon"></i>标签</a>
+            <a th:href="@{/admin/tocomment}" class="h-item item h-moblile-hide"><i class="comment alternate outline icon"></i>评论</a>
+            <a th:href="@{/admin/toSaying}" class="h-item item h-moblile-hide"><i class="certificate icon"></i>名言</a>
+
+
+
+            <div class="right h-item h-moblile-hide menu">
+                <div class="ui dropdown item">
+                    <div class="text">
+                        <img class="ui avatar image" th:src="${session.INTERCEPTOR_USER_TEST.avatar}">
+                        [[${session.INTERCEPTOR_USER_TEST.nickname}]]
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a th:href="@{/toIndex}" class="item">返回首页</a>
+                        <a th:href="@{/admin/logout}" class="item">注销</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="ui icon button h-right-top h-moblile-show" id="stackable-hide" style="background-color: #ffffff;">
+            <i class="sidebar icon"></i>
+        </a>
+    </nav>
+</div>
+
+
+<th:block th:fragment="script">
+<script  th:src="@{/js/jquery-1.11.1-min.js}"></script>
+<script  th:src="@{/lib/Semantic-UI-CSS-master/semantic.min.js}"></script>
+<script th:src="@{/lib/editorMd/editormd.min.js}"></script>
+<script th:src="@{/js/index.js}"></script>
+</th:block>
+</body>
+</html>

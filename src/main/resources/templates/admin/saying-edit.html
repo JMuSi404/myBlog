@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/adminHead::head(~{::title})">
+		<title>名言编辑</title>
+	</head>
+	<body>
+    <!-- 导航 -->
+    <div th:replace="commons/adminHead::top"></div>
+
+    <!-- 	主体 -->
+	<div class="h-body-bottom h-margin-show h-padded-td-large">
+	<div class="ui container">
+                <form  th:action="@{/admin/saying}" method="post" class="ui form">
+                    <input type="hidden" th:value="${saying.id}" name="id" id="TagId">
+                    <input type="hidden" name="_method" value="PUT" >
+                    <div class="field">
+                        <div class="ui left labeled input">
+                            <label class="ui teal basic label">名称</label>
+                            <input type="text" id="TagName" th:value="${saying.name}"  name="name"  required>
+                        </div>
+                    </div>
+                    <div class="ui error message"></div>
+                    <div class="ui right aligned container">
+                        <button type="button"  class="ui button" onclick="window.history.go(-1)" >返回</button>
+                        <button id="update_btn" type="submit"  class="ui teal button">修改</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    <th:block th:replace="commons/adminHead::script" ></th:block>
+
+		<script type="text/javascript">
+            $('.ui.form').form({
+                fields : {
+                    title : {
+                        identifier: 'name',
+                        rules: [{
+                            type : 'empty',
+                            prompt: '请输入名言'
+                        }]
+                    }
+                }
+            });
+		        $('.ui .dropdown').dropdown({
+					on:'hover'
+				});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>500 - 服务器错误</title>
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1"/>
+    <style>
+        html, body{
+            height: 100%;
+        }
+
+        body{
+            color: #333;
+            margin: auto;
+            padding: 1em;
+            display: table;
+            user-select: none;
+            box-sizing: border-box;
+            font: lighter 20px "微软雅黑";
+        }
+        a{
+            color: #3498db;
+            text-decoration: none;
+        }
+        h1{
+            margin-top: 0;
+            font-size: 3.5em;
+        }
+        main{
+            margin: 0 auto;
+            text-align: center;
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+    </style>
+</head>
+<body>
+<main>
+    <h1>:'(</h1>
+    <p>服务器开小差啦！管理员正在修理中...</p>
+    <p>还请阁下静候站点恢复~</p>
+    <p>状态码:[[${status}]]</p>
+    <p>错误信息:[[${message}]]</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/blogHead::head(~{::title})">
+	<title>Joe的小窝-标签</title>
+	</head>
+	<body>
+	<!-- 导航 -->
+	<div th:replace="commons/blogHead::top"></div>
+
+
+	<!-- 	主体 -->
+	<div class="h-body-bottom h-margin-show h-padded-td-large">
+	<div class="ui container">
+
+			<!-- 标签 -->
+		<div class="d-web-info-box animate__animated animate__fadeIn" id="tagsList"  style="display: none;">
+			<center><h1>标签-[[${TagsCount}]]</h1></center>
+		<div class="ui h-padded-td-large aligned centered middle grid h-boder-radius" >
+		<div class="ui labeled button h-margin-td-tiny" th:each="tag : ${tags}" style="margin-left: 15px" >
+		<a href="javascript:;" th:id="${tag.id}"  class="ui tagsBtn"  th:classappend="${Id==tag.id} ? 'teal'">[[${tag.name}]]</a>
+		</div>
+		<input type="hidden" id="TagidHide" th:value="${Id}">
+		</div>
+		</div>
+			<!-- 内容 -->
+		<div id="type_list">
+
+
+		</div>
+			
+		<!--  bottom -->
+			<div class="ui middle aligned centered grid h-padded-td" id="blogTagPaging" >
+
+			</div>
+		</div>	
+			
+	</div>
+	</div>
+
+	<meting-js
+			server="netease"
+			type="playlist"
+			id="7470734184"
+			fixed="true"
+			loop="all"
+			order="random"
+			preload="auto"
+			list-folded="ture"
+			list-max-height="500px"
+			lrc-type="1">
+	</meting-js>
+
+		<th:block th:replace="commons/blogHead::script" ></th:block>
+	<script th:src="@{/js/tagsViews.js}"></script>
+	</body>
+</html>

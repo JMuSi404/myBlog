@@ -1,0 +1,36 @@
+.tagsBtn:link{
+    color: #615959;
+}
+
+.tagsBtn:hover {
+    color: #0191ff;
+    transform: scale(1.1);
+      transition: all .3s;
+}
+#scroll_down_btn:hover{
+    transform: scale(1.2);
+    transition: all .5s;
+}
+
+.topBtn{
+    box-shadow: 1px 1px 5px 1px #dedbdb !important;
+    border-radius: 15% !important;
+    background-color: #ffffff !important;
+}
+
+.listBtn{
+    box-shadow: 1px 1px 4px 1px  #dedbdb !important;
+    border-radius: 15% !important;
+    background-color: #ffffff !important;
+}
+
+.titleSuspension:hover{
+    color: dodgerblue !important;
+    transform: translateY(-3px);
+    transition: .3s;
+}
+.Navbtn:hover{
+    color: dodgerblue !important;
+    background-color: #ffffff !important;
+}
+

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/adminHead::head(~{::title})">
+    <title>评论管理</title>
+</head>
+
+<body>
+<!-- 导航 -->
+<div th:replace="commons/adminHead::top"></div>
+
+<!-- 	主体 -->
+<div class="h-body-bottom h-margin-show h-padded-td-large">
+    <div class="ui container ">
+        <div  class="ui secondary  form">
+            <div class="fields">
+                <div class="field">
+                    <select class="ui dropdown" id="blogInfo">
+                        <option th:each="blog :${blogs}" th:value="${blog.id}">[[${blog.title}]]</option>
+                    </select>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div id="table-container">
+            <table  class="ui compact teal table">
+                <thead>
+                <tr>
+                    <th>评论者</th>
+                    <th>评论邮箱</th>
+                    <th>评论内容</th>
+                    <th colspan="7">&nbsp;&nbsp;操作</th>
+                </tr>
+                </thead>
+                <input type="hidden" id="blogId">
+                <tbody id="commentList">
+
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>
+                        <span>总记录数:<b id="commen_total"></b></span>
+                    </th>
+                    <th colspan="7" id="commen_page_list">
+
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+
+            <div class="ui success message" style="display: none">
+                <i class="close icon"></i>
+                <div class="header">提示：</div>
+                <p id="msg"></p>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<th:block th:replace="commons/adminHead::script" ></th:block>
+
+<script>
+      $(function () {
+          QueryCommenPage(null,$("#blogInfo").val());
+      })
+
+    $(document).on("change","#blogInfo",function () {
+        QueryCommenPage(null,$(this).val());
+    })
+
+    function QueryCommenPage(PageNum,blogId) {
+        $("#blogId").val(blogId);
+        $.ajax({
+            url:'/admin/comment',
+            type: "GET",
+            data:{
+                "pageNum":PageNum,
+                "blogId":blogId
+            },
+            success:function (data) {
+                $("#commentList").empty();
+                $.each(data.hashMap.commentsPage.list,function (index,item) {
+                    $("<tr></tr>").append(
+                        $('<td></td>').append(item.nickname)
+                    ).append(
+                        $("<td></td>").append(item.email)
+                    ).append(
+                        $("<td></td>").append(item.content)
+                    ).append(
+                        $("<td colspan='7'></td>").append(
+                            $("<a href=\"javascript:;\"  class=\"ui mini red basic button deleteComment\">删除</a>")
+                        ).attr("id",item.id)
+                    ).appendTo("#commentList")
+                })
+
+
+                $("#commen_total").text(data.hashMap.commentsPage.total);
+
+                $("#commen_page_list").empty();
+
+                let div= $("<div class=\"ui mini pagination menu\"></div>");
+                div.append(
+                    $("<a class=\"item\"></a>").append("上一页")
+                        .on("click",function () {
+                            QueryCommenPage(data.hashMap.commentsPage.prePage,blogId)
+                        })
+                )
+                $.each(data.hashMap.commentsPage.navigatepageNums,function (index,item) {
+                    div.append(
+                        $("<a class=\"item\"></a>").append(item)
+                            .addClass(data.hashMap.commentsPage.pageNum==item?"active pageNum":"")
+                            .on("click",function () {
+                                QueryCommenPage(item, blogId)
+                            })
+                    )
+                })
+                div.append(
+                    $("<a class=\"item\"></a>").append("下一页")
+                        .on("click",function () {
+                            QueryCommenPage(data.hashMap.commentsPage.nextPage,blogId)
+                        })
+                )
+                div.appendTo("#commen_page_list");
+            }
+        })
+    }
+
+
+    $(document).on("click",".deleteComment",function () {
+        if (confirm("确定删除吗?")){
+            $('#msg').text("");
+            $("#requset_msg").text("");
+            $.ajax({
+                url:'/admin/comment',
+                type: "POST",
+                data:{
+                    "_method":"DELETE",
+                    "id":$(this).parent().attr("id")
+                },
+                success:function (data) {
+                    if (data.code=="100"){
+                        $('#msg').text("删除成功");
+                        $(".message").attr("style","display:block;");
+                        QueryCommenPage($(".pageNum").text(),$("#blogId").val());
+                    }else {
+                        $(".message").attr("style","display:block;");
+                        $('#msg').text(data.message);
+                    }
+                }}) }
+    })
+
+
+    $('.ui .dropdown').dropdown({
+        on:'hover'
+    });
+
+    $(".message .close").on("click",function () {
+        $(this).closest(".message")
+            .transition("fade");
+    });
+
+</script>
+
+</body>
+</html>

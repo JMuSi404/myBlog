@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heshijia.myblog.mapper.BlogMapper">
+
+    <resultMap id="BaseResultMap" type="com.heshijia.myblog.pojo.Blog">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="firstPicture" column="first_Picture" jdbcType="VARCHAR"/>
+            <result property="flag" column="flag" jdbcType="VARCHAR"/>
+            <result property="views" column="views" jdbcType="INTEGER"/>
+            <result property="commentabled" column="commentabled" jdbcType="BIT"/>
+            <result property="published" column="published" jdbcType="BIT"/>
+            <result property="recommendned" column="recommendned" jdbcType="BIT"/>
+            <result property="createtime" column="createTime" jdbcType="VARCHAR"/>
+            <result property="edittime" column="editTime" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"></result>
+        <result property="commentCount" column="comment_count" jdbcType="INTEGER"></result>
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,title,content,
+        first_Picture,flag,views,
+        commentabled,published,recommendned,
+        createTime,editTime,user_id,user_name,description,comment_count
+    </sql>
+
+    <select id="selectBlogConditionPage" resultMap="BaseResultMap" parameterType="map">
+        SELECT tb.id,tb.title,tb.flag,tb.published,tb.recommendned,tb.editTime,tb.createTime FROM `t_blog` tb
+        <if test="tagIdConditions !=null and tagIdConditions != '' ">
+        JOIN t_blog_tag_relation tbr ON tbr.blog_id=tb.id
+        JOIN t_tag  tt ON  tbr.tag_id=tt.id
+        </if>
+          <where>
+          <if test="titleConditions !=null and titleConditions!= ''">
+          and tb.title LIKE  CONCAT('%',#{titleConditions},'%')
+          </if>
+          <if test="tagIdConditions !=null and tagIdConditions != '' ">
+          and  tbr.tag_id=#{tagIdConditions}
+          </if>
+          <if test="recommendConditions !=null and recommendConditions != '' ">
+           and  tb.recommendned=#{recommendConditions}
+          </if>
+          </where>
+        order by tb.editTime DESC,tb.createTime
+    </select>
+    <select id="selectAllById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_blog
+        where
+        id = #{id,jdbcType=NUMERIC}
+    </select>
+
+    <select id="selectBlogsShowList" resultMap="BaseResultMap">
+        SELECT tb.id,tb.title,tb.first_Picture,tb.views,tb.recommendned,tb.createTime,tb.editTime,tu.nickname as user_name,
+               tb.description,COUNT(tc.id) as comment_count from
+                 t_blog tb
+                JOIN t_user tu ON tu.id=tb.user_id
+                left	JOIN t_comment tc ON tc.blog_id=tb.id
+        WHERE tb.published=1
+        GROUP BY tb.id
+        ORDER BY tb.recommendned desc,tb.createTime desc
+    </select>
+
+
+    <select id="selectBlogsSearchResults" resultMap="BaseResultMap">
+        SELECT tb.id,tb.title,tb.first_Picture,tb.views,tb.recommendned,tb.createTime,tb.editTime,tu.nickname as user_name,tb.description,COUNT(tc.id) as comment_count from t_blog tb
+         JOIN t_user tu ON tu.id=tb.user_id
+          left	JOIN t_comment tc ON tc.blog_id=tb.id
+        WHERE tb.title LIKE CONCAT('%',#{condition},'%')
+          and tb.published=1
+        GROUP BY tb.id
+        ORDER BY tb.recommendned desc,tb.createTime desc
+    </select>
+
+    <select id="selectBlogDetailsById" resultMap="BaseResultMap">
+        SELECT tb.id,tb.title,tb.createTime,tb.editTime,tb.commentabled,tb.views,tb.content,tb.flag,tu.nickname user_name,COUNT(tc.id) as comment_count FROM `t_blog` tb
+        JOIN t_user tu ON tu.id=tb.user_id
+        left	JOIN t_comment tc ON tc.blog_id=tb.id
+        WHERE tb.id=#{id}
+        GROUP BY tb.id
+        ORDER BY tb.recommendned desc,tb.createTime desc
+    </select>
+
+    <select id="selectBlogByTagId" resultMap="BaseResultMap">
+        SELECT tb.id,tb.title,tb.first_Picture,tb.views,tb.editTime,tb.createTime,tb.description,tu.nickname user_name,COUNT(tc.id) as comment_count FROM `t_blog` tb
+        JOIN t_blog_tag_relation tbr ON tbr.blog_id=tb.id
+        JOIN t_tag  tt ON  tbr.tag_id=tt.id
+        JOIN t_user tu ON tb.user_id=tu.id
+        left	JOIN t_comment tc ON tc.blog_id=tb.id
+        <where>
+        tb.published=1
+        <if test="id !=null and id!='' and id!='0'">
+            and tbr.tag_id=#{id}
+        </if>
+        </where>
+        GROUP BY tb.id
+        ORDER BY tb.recommendned desc,tb.createTime desc
+    </select>
+
+    <select id="selectBlogYear"  resultType="string">
+        SELECT  DATE_FORMAT(tb.createTime,'%Y') AS year FROM `t_blog` tb GROUP BY year ORDER BY year DESC
+    </select>
+
+    <select id="selectBlogArchive"  resultMap="BaseResultMap">
+        SELECT
+         id,title,content, first_Picture,flag,views,
+         commentabled,published,recommendned,editTime,user_id,
+         user_name,description,DATE_FORMAT(createTime,'%m-%d') as createTime
+        FROM `t_blog`
+        WHERE DATE_FORMAT(createTime,'%Y')=#{year}
+        and   published=1
+        ORDER BY createTime desc
+    </select>
+    <update id="updateViewsById">
+        update t_blog
+        set views = #{views,jdbcType=NUMERIC}
+        where id = #{id,jdbcType=NUMERIC}
+    </update>
+    <select id="selectIdAndTitle" resultMap="BaseResultMap">
+        select
+        id,title
+        from t_blog
+    </select>
+
+    <select id="selectBlogCount" resultType="integer">
+        select   COUNT(*)  from t_blog WHERE published=1
+    </select>
+
+    <select id="selectBlogViewsCount" resultType="integer">
+        select   SUM(views)  from t_blog
+    </select>
+
+</mapper>

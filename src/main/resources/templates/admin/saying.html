@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/adminHead::head(~{::title})">
+		<title>名言管理</title>
+</head>
+
+	<body>
+	<!-- 导航 -->
+	<div th:replace="commons/adminHead::top"></div>
+
+	<!-- 	主体 -->
+	<div class="h-body-bottom h-margin-show h-padded-td-large">
+	<div class="ui container ">
+        <div  class="ui secondary  form">
+            <div class="fields">
+                <div class="field">
+                    <a th:href="@{/admin/toSayingInput}" class="ui  right floated orange  button">新增名言</a>
+                </div>
+            </div>
+
+
+        </div>
+
+      <div id="table-container">
+        <table  class="ui compact teal table">
+          <thead>
+          <tr>
+            <th>序号</th>
+            <th >名言</th>
+             <th colspan="7">&nbsp;&nbsp;操作</th>
+          </tr>
+          </thead>
+          <tbody id="sayingList">
+
+          </tbody>
+          <tfoot>
+          <tr>
+			  <th>
+				  <span>总记录数:<b id="saying_total"></b></span>
+			  </th>
+            <th colspan="7" id="saying_page_list">
+
+            </th>
+          </tr>
+          </tfoot>
+        </table>
+
+       <div class="ui success message" style="display: none" th:style="${msg!=null?'display:block;':'display:none;'}">
+          <i class="close icon"></i>
+          <div class="header">提示：</div>
+          <p th:text="${msg}" id="requset_msg"></p>
+           <p id="msg"></p>
+        </div>
+
+      </div>
+
+	</div>
+	</div>
+
+	<th:block th:replace="commons/adminHead::script" ></th:block>
+
+	<script>
+        $(function () {
+            QueryTagsPage();
+        })
+        function QueryTagsPage(PageNum) {
+            $.ajax({
+                url:'/admin/saying',
+                type: "GET",
+                data:{
+                    "pageNum":PageNum
+                },
+                success:function (data) {
+                    console.log(data)
+                    $("#sayingList").empty();
+                    $.each(data.hashMap.sayingPage.list,function (index,item) {
+                        $("<tr></tr>").append(
+                            $('<td></td>').append(item.serialnumber)
+                        ).append(
+                            $("<td></td>").append(item.name)
+                        ).append(
+                            $("<td colspan='7'></td>").append(
+                                $("<a href=\"javascript:;\"  class=\"ui mini teal basic button editSaying\">编辑</a>")
+                            ).append(
+                                $("<a href=\"javascript:;\"  class=\"ui mini red basic button deleteSaying\">删除</a>")
+                            ).attr("id",item.id)
+                        ).appendTo("#sayingList")
+                    })
+
+                   $("#saying_total").text(data.hashMap.sayingPage.total);
+
+                    $("#saying_page_list").empty();
+
+                    let div= $("<div class=\"ui mini pagination menu\"></div>");
+                    div.append(
+                        $("<a class=\"item\"></a>").append("上一页")
+                            .on("click",function () {
+                                QueryTagsPage(data.hashMap.sayingPage.prePage,null)
+                            })
+                    )
+                    $.each(data.hashMap.sayingPage.navigatepageNums,function (index,item) {
+                        div.append(
+                            $("<a class=\"item pageNum\"></a>").append(item)
+                                .addClass(data.hashMap.sayingPage.pageNum==item?"active":"")
+                                .on("click",function () {
+                                    QueryTagsPage(item,null)
+                                })
+                        )
+                    })
+                    div.append(
+                        $("<a class=\"item\"></a>").append("下一页")
+                            .on("click",function () {
+                                QueryTagsPage(data.hashMap.sayingPage.nextPage,null)
+                            })
+                    )
+                    div.appendTo("#saying_page_list");
+                }
+            })
+        }
+
+
+        $(document).on("click",".deleteSaying",function () {
+            if (confirm("确定删除吗?")){
+                $('#msg').text("");
+                $("#requset_msg").text("");
+            $.ajax({
+                url:'/admin/saying',
+                type: "POST",
+                data:{
+                    "_method":"DELETE",
+                    "id":$(this).parent().attr("id")
+                },
+                success:function (data) {
+                    if (data.code=="100"){
+                        $('#msg').text("删除成功");
+                        $(".message").attr("style","display:block;");
+                        QueryTagsPage($(".item.active").text());
+                    }else {
+                        $(".message").attr("style","display:block;");
+                        $('#msg').text(data.message);
+                    }
+                }}) }
+        })
+
+
+        $(document).on("click",".editSaying",function () {
+          window.location.href="/admin/toSayingEdit?id="+$(this).parent().attr("id");
+        })
+
+		$('.ui .dropdown').dropdown({
+			on:'hover'
+		});
+
+
+        $(".message .close").on("click",function () {
+            $(this).closest(".message")
+            .transition("fade");
+        });
+	</script>
+
+	</body>
+</html>

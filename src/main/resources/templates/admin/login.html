@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script th:src="@{/js/login.js}" crossorigin="anonymous"></script>
+    <link rel="stylesheet"  th:href="@{/css/style.css}"  />
+    <script  th:src="@{/js/jquery-1.11.1-min.js}"></script>
+    <script type="text/javascript">
+      $(document).on("click","#login_btn",function () {
+        $("#span_text").text("");
+        $("#msg_text").text("");
+        var Test=/^[A-Za-z0-9]{1,20}$/;
+        if ($("#username_text").val()==''||$("#password_text").val()==''){
+          $("#span_text").text("用户名或者密码不能为空");
+          return;
+        } else if (!Test.test($("#username_text").val())||!Test.test($("#password_text").val())){
+          $("#span_text").text("只能为数字和英文,18位字符以下")
+          return;
+        }else {
+          $("#login_from").submit();
+        }
+      })
+    </script>
+    <title>登录</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="forms-container">
+        <div class="signin-signup">
+          <form th:action="@{/admin/login}" method="post" id="login_from" class="sign-in-form">
+            <h2 class="title">登录</h2>
+            <span id="span_text" style="color: red"></span>
+            <span id="msg_text" style="color: red">[[${msg}]]</span>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" id="username_text" name="username" placeholder="用户名" />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="password_text" name="password" placeholder="密码" />
+            </div>
+            <input type="button" value="登录" id="login_btn" class="btn solid" />
+          </form>
+        </div>
+      </div>
+
+      <div class="panels-container">
+        <div class="panel left-panel">
+          <img th:src="@{/img/log.svg}"  class="image" alt="" />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

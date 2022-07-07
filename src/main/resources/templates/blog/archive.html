@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/blogHead::head(~{::title})">
+	<title>Joe的小窝-归档</title>
+	</head>
+
+	<body>
+	<!-- 导航 -->
+	<div th:replace="commons/blogHead::top"></div>
+
+	<!-- 	主体 -->
+	<div class="h-body-bottom h-margin-show h-padded-td-huge" id="archiveBody">
+	<div class="ui container">
+		<!-- 归档 -->
+		<ul class="layui-timeline ">
+
+		  <li class="layui-timeline-item animate__animated animate__fadeIn" th:each="item,Stat:${ArchiveMap}" th:if="${not #lists.isEmpty(Stat.current.value)}">
+		    <i class="layui-timeline-axis calendar alternate icon" style="background-color: #f5f5f5 !important;"></i>
+		    <div class="layui-timeline-content layui-text">
+		      <h2 class="layui-timeline-title"><b class="h-box-margin-left" th:text="${Stat.current.key}"></b></h2>
+	         <div>
+				 <div class="ui fluid vertical menu h-boder-radius animate__animated animate__flipInX " th:each="blog:${Stat.current.value}">
+				 				 <a th:href="@{/toBlog/{id}(id=${blog.id})}"  class="item" style="text-decoration:none">
+				 					 <span>
+				 						  <div class="ui green basic left pointing label h-padded-miniplus" th:text="${blog.createtime}"></div>
+				 						   <b class="h-box-margin-left">[[${blog.title}]]</b>
+				 					 </span>
+				 					  <div class="ui  left  label " th:classappend="${blog.flag eq '原创'} ? 'teal':'red'"  >[[${blog.flag}]]</div>
+				 				 </a>
+				 </div>
+				 </div>
+			 </div>
+		  </li>
+		 <li class="layui-timeline-item">
+	   <i class="layui-timeline-axis calendar alternate icon" style="background-color: #f5f5f5 !important;"></i>
+		      <div class="layui-timeline-content layui-text">
+		        <div class="layui-timeline-title" style="margin-left: 20px;"><b>过去</b></div>
+		      </div>
+		    </li>
+		</ul>
+	</div>
+	</div>
+	<!--		回到顶部-->
+	<div id="backToTheTop" class="h-padded h-fixed h-right-bottom" style="display: none">
+		<a title="回到顶部" href="javascript:;" class="ui icon button topBtn"><i class="angle up blue icon"></i></a>
+	</div>
+	<meting-js
+			server="netease"
+			type="playlist"
+			id="7470734184"
+			fixed="true"
+			loop="all"
+			order="random"
+			preload="auto"
+			list-folded="ture"
+			list-max-height="500px"
+			lrc-type="1">
+	</meting-js>
+
+	<th:block th:replace="commons/blogHead::script" ></th:block>
+
+<script th:src="@{/js/archiveViews.js}"></script>
+	</body>
+</html>

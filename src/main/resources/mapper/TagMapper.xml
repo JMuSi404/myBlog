@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heshijia.myblog.mapper.TagMapper">
+
+    <resultMap id="BaseResultMap" type="com.heshijia.myblog.pojo.Tag">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="count" column="count" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,count
+    </sql>
+    <select id="selectAllByName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_tag
+        where
+        name = #{name,jdbcType=VARCHAR}
+    </select>
+    <delete id="delById">
+        delete
+        from t_tag
+        where id = #{id,jdbcType=NUMERIC}
+    </delete>
+    <select id="selectAllById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_tag
+        where
+        id = #{id,jdbcType=NUMERIC}
+    </select>
+    <update id="updateNameById">
+        update t_tag
+        set name = #{name,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=NUMERIC}
+    </update>
+
+    <select id="selectTagListByBlogId" resultMap="BaseResultMap">
+        SELECT tt.* FROM t_tag tt
+          JOIN t_blog_tag_relation tbr on tbr.tag_id=tt.id
+        WHERE  tbr.blog_id=#{blogId}
+    </select>
+
+    <select id="selectAllAndcount" resultMap="BaseResultMap">
+        SELECT tt.id,tt.`name`,COUNT(tbr.tag_id) count FROM t_tag tt
+            left  JOIN t_blog_tag_relation tbr ON tbr.tag_id=tt.id
+        GROUP BY tt.id
+    </select>
+    <select id="selectTagCount" resultType="integer">
+        select count(*)
+        from t_tag
+    </select>
+
+</mapper>

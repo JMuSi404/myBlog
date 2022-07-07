@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/blogHead::head(~{::title})">
+	<title>Joe的小窝</title>
+</head>
+	<body>
+		<!-- 导航 -->
+		<div th:replace="commons/blogHead::top"></div>
+		<!-- 	背景图 -->
+
+		<div class="h-box" id="indexBackground">
+			<div class="h-box-div" style="display: flex;justify-content: center;align-items: center;padding-top: 16%;">
+				<center>
+				<p id="p_title" class="animate__animated animate__slideInDown"
+					style="font-size: 25px;color: #ffffff;">
+					&nbsp;
+				</p>
+				</center>
+			</div>
+			<div style="display: flex;justify-content: center;align-items: center;padding-top: 21%;">
+				<a href="javascript:;" class="h-text-font-size-plus" id="scroll_down_btn">
+					<i class="angle down icon animate__animated animate__bounce"  style="color: rgb(255, 255, 255); caret-color: rgb(255, 255, 255);"></i>
+				</a>
+			</div>
+		</div>
+		<!-- 	主体 -->
+<div class="h-padded-td-big" id="Indexbody">
+			<div class="ui container">
+			<div class="ui stackable grid">
+			<div class="eleven wide column">
+		<!--  content -->
+		<div id="contentList">
+
+       </div>
+		<!--  bottom -->
+	    	<div class="ui middle aligned centered grid h-padded-td" id="blogPaging">
+
+			</div>
+		</div>
+				<!-- 	侧边栏 -->
+<div class="five wide column animate__animated animate__fadeIn">
+	<div class="d-web-info-box" data-wow-duration="0.4s" id="H-Sidebar" >
+						<div class="d-web-user-info-box">
+							<img th:src="@{/img/blogAvatar.jpg}" class="avatarImg" width="80px" height="80px">
+							<h3>Joe</h3>
+							<span>往者不可谏,来者犹可追</span>
+						</div>
+						<div class="ui aligned centered grid h-padded-td-large">
+							<span class="m-text">文章<br><a href="javascript:;" class="m-text-span" id="blogCount">&nbsp;</a></span>
+							<span class="m-text">标签<br><a href="javascript:;" class="m-text-span" id="TagCount">&nbsp;</a></span>
+							<span class="m-text">评论<br><a href="javascript:;" class="m-text-span" id="commentCount">&nbsp;</a></span>
+							<span class="m-text">浏览量<br><a href="javascript:;" class="m-text-span" id="ViewCount">&nbsp;</a></span>
+						</div>
+		            <div class="h-padded-td-small">
+			           <span><i class="rocket icon"></i>社交</span>
+		                </div>
+		              <br>
+						<div class="ui aligned centered  middle grid h-padded-td">
+							<p class="h-text-font-size"><i class="wechat green icon"></i><a th:href="@{/img/WechatQRCode.jpg}"  target="_blank" >&nbsp;微信</a></p>
+							<p class="h-text-font-size"><i class="copyright orange icon"></i><a href="https://blog.csdn.net/qq_53282665"  target="_blank" >&nbsp;CSDN</a></p>
+							<p class="h-text-font-size"><i class="github square black icon"></i><a href="https://github.com/JMuSi404"  target="_blank" >&nbsp;GitHub</a></p>
+						</div>
+						<div class="h-padded-td-small">
+							<span><i class="tags icon"></i>标签</span>
+						</div>
+						<div class="h-padded-td-small">
+<!--							标签-->
+							<div class="ui" id="TagList">
+
+							</div>
+						</div>
+		<div class="h-padded-td-small">
+			<span><i class="globe icon"></i>网站运行时间</span>
+		</div>
+		<div class="h-padded-td-small">
+			<span id="htmer_time"></span>
+		</div>
+
+		</div>
+					<!-- -->
+				</div>
+			</div>
+	</div>
+</div>
+<!--		回到顶部-->
+		<div id="backToTheTop" class="h-padded h-fixed h-right-bottom" style="display: none">
+			<a title="回到顶部" href="javascript:;" class="ui icon button topBtn"><i class="angle up blue icon"></i></a>
+		</div>
+<!--音乐插件-->
+		<meting-js
+				server="netease"
+				type="playlist"
+				id="7470734184"
+				fixed="true"
+				loop="all"
+				order="random"
+				preload="auto"
+				list-folded="ture"
+				list-max-height="500px"
+				lrc-type="1">
+		</meting-js>
+
+		<!-- 底部 -->
+		<footer  class="ui attached segment">
+			<div class="ui container">
+				<center>
+					<p>©2022 By Joe</p>
+					<a href="https://beian.miit.gov.cn">
+						湘ICP备2022011818号</a>
+				</center>
+			</div>
+		</footer>
+		<th:block th:replace="commons/blogHead::script" ></th:block>
+		<script th:src="@{/js/indexViews.js}"></script>
+	</body>
+</html>

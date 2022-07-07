@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/adminHead::head(~{::title})">
+		<title>名言发布</title>
+	</head>
+	<body>
+    <!-- 导航 -->
+    <div th:replace="commons/adminHead::top"></div>
+
+    <!-- 	主体 -->
+	<div class="h-body-bottom h-margin-show h-padded-td-large">
+	<div class="ui container">
+                <form  class="ui form">
+                    <input type="hidden" name="id">
+                    <div class="field">
+                        <div class="ui left labeled input">
+                            <label class="ui teal basic label">名言</label>
+                            <input type="text" id="sayingName" name="name" >
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left labeled input">
+                            <label class="ui teal basic label">序号</label>
+                            <input type="number" id="sayingNumber" name="sayingNumber" >
+                        </div>
+                    </div>
+                    <div class="ui right aligned container">
+                        <button type="button"  class="ui button" onclick="window.history.go(-1)" >返回</button>
+                        <button id="add_btn" type="button"  class="ui teal button">提交</button>
+                    </div>
+                </form>
+
+          <div class="ui success message" style="display: none">
+            <i class="close icon"></i>
+            <div class="header">提示：</div>
+            <p id="msg"></p>
+            </div>
+
+            </div>
+        </div>
+
+
+    <th:block th:replace="commons/adminHead::script" ></th:block>
+
+		<script type="text/javascript">
+            $('.ui.form').form({
+                fields : {
+                    title : {
+                        identifier: 'name',
+                        rules: [{
+                            type : 'empty',
+                            prompt: '请输入分类名称'
+                        }]
+                    }
+                }
+            });
+		        $('.ui .dropdown').dropdown({
+					on:'hover'
+				});
+
+		        $(document).on("click","#add_btn",function () {
+                    $("#msg").text("");
+		            if ($("#sayingName").val()==null||$("#sayingName").val()==""){
+                        $(".message").attr("style","display:block;");
+                        $("#msg").text("名言不能为空");
+		                return;
+                    }
+
+                    if ($("#sayingNumber").val()==null||$("#sayingNumber").val()==""){
+                        $(".message").attr("style","display:block;");
+                        $("#msg").text("序号不能为空");
+                        return;
+                    }
+
+                  $.ajax({
+                      url:'/admin/saying',
+                      type: "POST",
+                      data:{
+                          sayingName:$.trim($("#sayingName").val()),
+                          sayingNumber:$("#sayingNumber").val()
+                      },
+                      success:function (data) {
+                          if (data.code=="100"){
+                              $("#sayingName").val("");
+                              $("#sayingNumber").val("");
+                              $(".message").attr("style","display:block;");
+                              $("#msg").text("添加成功");
+                          }else {
+                              $(".message").attr("style","display:block;");
+                              $("#msg").text(data.message);
+                          }
+                      }
+                  })
+                })
+            $(".message .close").on("click",function () {
+                $(this).closest(".message")
+                    .transition("fade");
+            });
+		</script>
+	</body>
+</html>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heshijia.myblog.mapper.SayingMapper">
+
+    <resultMap id="BaseResultMap" type="com.heshijia.myblog.pojo.Saying">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="serialnumber" column="serialNumber" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,serialNumber
+    </sql>
+    <select id="selectAllByName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_saying
+        where
+        name = #{name,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAllBySerialnumber" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_saying
+        where
+        serialNumber = #{serialnumber,jdbcType=NUMERIC}
+    </select>
+    <select id="selectBySerialnumber" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_saying
+        where
+        serialNumber = #{serialnumber,jdbcType=NUMERIC}
+    </select>
+</mapper>

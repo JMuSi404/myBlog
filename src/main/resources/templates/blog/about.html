@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/blogHead::head(~{::title})">
+	<title>Joe的小窝-关于我</title>
+
+</head>
+	<body>
+	<!-- 导航 -->
+	<div th:replace="commons/blogHead::top"></div>
+
+	<!-- 	主体 -->
+	<div class="h-body-bottom h-padded-td-big animate__animated animate__fadeIn" id="blogbody">
+		<div class="ui container">
+			<!-- 头部 -->
+			<div class="ui top attached">
+				<div class="ui mini horizontal link list">
+					<div class="item">
+						<div class="content">
+							<span class="header"><i class = "user outline red icon" ></i>&nbsp;[[${blog.userName}]]</span>
+						</div>
+					</div>
+					<div class="item">
+						<i class="eye green icon"></i>&nbsp;[[${blog.views}]]
+					</div>
+					<div class="item">
+						<i class="edit blue icon"></i>&nbsp;[[${blog.edittime!=null && blog.edittime!=''?blog.edittime:blog.createtime}]]
+					</div>
+					<div class="item">
+						<i class="comment alternate outline orange icon"></i>&nbsp;[[${blog.commentCount}]]
+					</div>
+				</div>
+			</div>
+			<!-- 	内容 -->
+			<div class="ui  segment h-boder-radius">
+				<!-- 文章内容 -->
+				<div id="content" class="typo typo-selection js-toc-content h-padded-lr" th:utext="${blog.content}">
+
+				</div>
+			</div>
+
+
+			<div class="ui bottom attached" th:if="${blog.commentabled}">
+				<!-- 留言区域 -->
+				<div class="ui teal segment" id="comment_list">
+					<div class="ui threaded comments" style="max-width: 100%;">
+						<h3 class="ui dividing header">留言</h3>
+						<!--						留言遍历-->
+						<div id="comment_each_list">
+
+						</div>
+					</div>
+				</div>
+
+				<!-- 	评论区 -->
+				<div class="ui form" id="comment_form" >
+					<!--					博客Id-->
+					<input type="hidden" name="BlogId" th:value="${blog.id}">
+
+					<input type="hidden" name="ParentCommentId">
+					<div class="field">
+						<textarea name="content" placeholder="输入评论信息...."></textarea>
+					</div>
+					<div class="fields">
+						<div class="field h-mobile-wide h-margin-bottom-mini">
+							<div class="ui left icon input">
+								<i class="user icon"></i>
+								<input type="text" name="nickname" placeholder="请输入昵称(必填)" />
+							</div>
+						</div>
+						<div class="field h-mobile-wide h-margin-bottom-mini">
+							<div class="ui left icon input">
+								<i class="mail icon"></i>
+								<input type="text" name="email" placeholder="请输入邮箱(必填)" />
+							</div>
+						</div>
+						<div class="file h-mobile-wide h-margin-bottom-mini" id="comment_Reply" style="display: none;">
+							<div class="ui h-mobile-wide  button">
+								<span>取消回复</span>
+							</div>
+						</div>
+						<div class="file h-mobile-wide h-margin-bottom-mini">
+							<div class="ui teal h-mobile-wide labeled submit icon button" id="comment_btn">
+								<i class="icon edit"></i>评论
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--		回到顶部-->
+	<div id="backToTheTop" class="h-padded h-fixed h-right-bottom " style="display: none">
+		<a title="回到顶部" href="javascript:;" class="ui icon button topBtn"><i class="angle up blue icon"></i></a>
+	</div>
+	<meting-js
+			server="netease"
+			type="playlist"
+			id="7470734184"
+			fixed="true"
+			loop="all"
+			order="random"
+			preload="auto"
+			list-folded="ture"
+			list-max-height="500px"
+			lrc-type="1">
+	</meting-js>
+
+	<th:block th:replace="commons/blogHead::script" ></th:block>
+
+	<script th:inline="javascript">
+		$(document).on("click","#backToTheTop",function () {
+			$(window).scrollTo(0,500);
+		})
+		$('.message .close')
+				.on('click', function() {
+					$(this)
+							.closest('.message')
+							.transition('fade')
+					;
+				});
+		var waypoint = new Waypoint({
+			element: document.getElementById('blogbody'),
+			handler: function(direction) {
+				if (direction=='down'){
+					$("#backToTheTop").removeClass("animate__animated animate__bounceOutRight");
+					$("#backToTheTop").addClass("animate__animated animate__bounceInRight");
+					$("#backToTheTop").show();
+				}else {
+					$("#backToTheTop").hide();
+					$("#backToTheTop").removeClass("animate__animated animate__bounceInRight");
+					$("#backToTheTop").addClass("animate__animated animate__bounceOutRight");
+					$("#backToTheTop").show();
+				}
+			}
+		})
+		$(document).on("keyup","#Search_for_articles",function () {
+			if(event.keyCode==13){
+				window.location.href="/toblogSearch?title="+$.trim($("#Search_for_articles").val());
+			}
+		})
+
+		$(document).on("click","#search_blog_btn",function () {
+			window.location.href="/toblogSearch?title="+$.trim($("#Search_for_articles").val());
+		})
+		//评论表单验证
+		$('.ui .form').form({
+			fields: {
+				content: {
+					identifier: 'content',
+					rules: [{
+						type: 'empty',
+						prompt: '请输入评论内容'
+					}
+					]
+				},
+				nickname: {
+					identifier: 'nickname',
+					rules: [{
+						type: 'empty',
+						prompt: '请输入你的昵称'
+					}]
+				},
+				email: {
+					identifier: 'email',
+					rules: [{
+						type: 'email',
+						prompt: '请填写正确的邮箱地址'
+					}]
+				}
+			}
+		});
+		$(function () {
+			queryComment();
+		})
+		/**
+		 * 查询评论
+		 */
+		function queryComment() {
+			if ([[${blog.commentabled}]]){
+				$.ajax({
+					url:'/comment',
+					data:{"blogId":$("[name='BlogId']").val()},
+					type:"GET",
+					success:function (data) {
+						//清空评论列表
+						$("#comment_each_list").empty();
+						// 遍历父级评论
+						$.each(data,function (index,item) {
+
+							let commentDiv=	$("<div class=\"comment\"></div>");
+
+							commentDiv.append(
+									$("<a class=\"avatar\"></a>").append(
+											$("<img>").attr("src",item.avatar)
+									)
+							).append(
+									$("<div class=\"content\"></div>").append(
+											$("<a class=\"author\"></a>").append(item.nickname).append(
+													item.administrator? $("<div class=\"ui mini basic teal left pointing label h-padded-mini\">博主</div>"):""
+											)
+									).append(
+											$("<div class=\"metadata\"></div>").append(
+													$("<span class=\"date\"></span>").append(item.createtime)
+											)
+									).append(
+											$("<div class=\"text\"></div>").append(
+													$("<p></p>").append(item.content)
+											)
+									).append(
+											$("<div class=\"actions\"></div>").append(
+													$("<a class=\"reply\">回复</a>").on("click",function () {
+														reply($(this));
+													}).attr("data-id",item.id).attr("data-name",item.nickname)
+											)
+									)
+							)
+							// 如果有子级评论就遍历出来
+							if (item.list.length>0){
+
+								let commentsDiv=$("<div class=\"comments\"></div>");
+								// 遍历子级评论
+								$.each(item.list,function (listindex,listitem) {
+									commentsDiv.append(
+											$("<div class=\"comment\"></div>").append(
+													$("<a class=\"avatar\"></a>")
+															.append(
+																	$("<img>").attr("src",listitem.avatar)
+															)
+											).append(
+													$("<div class=\"content\"></div>").append(
+															$("<a class=\"author\"></a>").append(listitem.nickname).append(
+																	listitem.administrator? $("<div class=\"ui mini basic teal left pointing label h-padded-mini\">博主</div>"):""
+															)
+													).append(
+															$("<div class=\"metadata\"></div>").append(
+																	$("<span class=\"date\"></span>").append(listitem.createtime)
+															)
+													).append(
+															$("<div class=\"text\"></div>").append(listitem.content)
+													).append(
+															$("<div class=\"actions\"></div>").append(
+																	$("<a class=\"reply\">回复</a>").on("click",function () {
+																		reply($(this));
+																	}).attr("data-id",listitem.id).attr("data-name",listitem.nickname)
+															)
+													)
+											)
+									)
+									if(listitem.list.length>0){
+										eachList(listitem,commentsDiv);
+									}
+									// 将子级评论加到父级评论下
+									commentsDiv.appendTo(commentDiv);
+								})
+							}
+							// 将评论添加到评论列表
+							commentDiv.appendTo("#comment_each_list");
+						})
+					}
+				})
+			}
+		}
+
+		// 递归遍历后续的子评论
+		function eachList(eachlist,commentsDiv){
+			$.each(eachlist.list,function (listindex,listitem) {
+				commentsDiv.append(
+						$("<div class=\"comment\"></div>").append(
+								$("<a class=\"avatar\"></a>")
+										.append(
+												$("<img>").attr("src",listitem.avatar)
+										)
+						).append(
+								$("<div class=\"content\"></div>").append(
+										$("<a class=\"author\"></a>").append(
+												$("<span></span>").append(listitem.nickname).append(
+														listitem.administrator? $("<div class=\"ui mini basic teal left pointing label h-padded-mini\">博主</div>"):""
+												).append(
+														$("<span> 回复 </span>")
+												).append(
+														$("<a href='javascript:;'></a>").append("@"+eachlist.nickname)
+												)
+										)
+								).append(
+										$("<div class=\"metadata\"></div>").append(
+												$("<span class=\"date\"></span>").append(listitem.createtime)
+										)
+								).append(
+										$("<div class=\"text\"></div>").append(listitem.content)
+								).append(
+										$("<div class=\"actions\"></div>").append(
+												$("<a class=\"reply\">回复</a>").on("click", function () {
+													reply($(this));
+												}).attr("data-id", listitem.id).attr("data-name", listitem.nickname)
+										)
+								)
+						)
+				)
+				if (listitem.list.length>0){
+					eachList(listitem,commentsDiv);
+				}
+			})
+		}
+
+
+		/**
+		 * 添加评论校验
+		 */
+		$('#comment_btn').click(function () {
+			var boo = $('.ui .form').form('validate form');
+			if (boo) {
+				addComment();
+			}
+		});
+
+		/**
+		 * 添加评论
+		 */
+		function addComment() {
+			var content=$("[name='content']").val();
+			$.ajax({
+				url:'/comment',
+				data:{
+					"extendsCommentid":$("[name='ParentCommentId']").val(),
+					"blogId":$("[name='BlogId']").val(),
+					"content":content,
+					"nickname":$("[name='nickname']").val(),
+					"email":$("[name='email']").val()
+				},
+				type:"POST",
+				success:function () {
+					clearForm();
+					$("#comment_Reply").attr("style","display:none;");
+					queryComment();
+					emailAlert(content);
+				}
+			})
+		}
+
+		/**
+		 *
+		 * 邮件提醒
+		 */
+		function emailAlert(contentData){
+			$.ajax({
+				url:'/emailAlert',
+				data:{
+					"extendsCommentid":$("[name='ParentCommentId']").val(),
+					"blogId":$("[name='BlogId']").val(),
+					"content":contentData,
+					"nickname":$("[name='nickname']").val(),
+					"email":$("[name='email']").val()
+				},
+				type:"POST",
+				success:function () {
+
+				}
+			})
+		}
+		/**
+		 * 获取回复评论对象
+		 */
+		function reply(obj) {
+			$("[name='content']").attr("placeholder","@"+$(obj).data("name")).focus();
+			$("[name='ParentCommentId']").val($(obj).data("id"));
+			$("#comment_Reply").attr("style","display:block;");
+			$(window).scrollTo($("#comment_form"),500);
+		}
+
+
+		$(document).on("click","#comment_Reply",function () {
+			$("[name='content']").attr("placeholder","输入评论信息....").focus();
+			$("[name='ParentCommentId']").val("");
+			$("#comment_Reply").attr("style","display:none;");
+		})
+
+
+
+		/**
+		 * 清空添加评论表单数据
+		 */
+		function clearForm() {
+			$("[name='content']").attr("placeholder","输入评论信息....")
+			$("[name='content']").val("");
+			$("[name='ParentCommentId']").val("");
+		}
+
+
+	</script>
+	</body>
+</html>

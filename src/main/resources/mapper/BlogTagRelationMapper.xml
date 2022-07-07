@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heshijia.myblog.mapper.BlogTagRelationMapper">
+
+    <resultMap id="BaseResultMap" type="com.heshijia.myblog.pojo.BlogTagRelation">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="blogId" column="blog_id" jdbcType="BIGINT"/>
+            <result property="tagId" column="tag_id" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,blog_id,tag_id
+    </sql>
+    <delete id="deleteByBlogId">
+        delete
+        from t_blog_tag_relation
+        where blog_id = #{blogId,jdbcType=NUMERIC}
+    </delete>
+    <delete id="deleteByTagId">
+        delete
+        from t_blog_tag_relation
+        where tag_id = #{tagId,jdbcType=NUMERIC}
+    </delete>
+</mapper>

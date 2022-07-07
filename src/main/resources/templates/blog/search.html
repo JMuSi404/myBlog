@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/blogHead::head(~{::title})">
+    <title>Joe的小窝-搜索</title>
+</head>
+<body>
+<!-- 导航 -->
+<div th:replace="commons/blogHead::top"></div>
+
+
+<!-- 	主体 -->
+<div class="h-body-bottom h-margin-show h-padded-td-large">
+    <div class="ui container">
+
+        <!-- 标签 -->
+        <div class="ui segment h-boder-radius animate__animated animate__fadeIn">
+            <!-- 头部 -->
+            <div class="ui top h-boder-radius">
+                <div class="ui middle aligned two column grid">
+                    <div class="column">
+                        <h3 class="ui  header">搜索结果</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" th:value="${title}" id="Search_title_value">
+        <!-- 内容 -->
+        <div id="Search_list">
+
+
+        </div>
+
+        <!--  bottom -->
+        <div class="ui middle aligned centered grid h-padded-td" id="blogPaging">
+
+        </div>
+    </div>
+
+</div>
+</div>
+<meting-js
+        server="netease"
+        type="playlist"
+        id="7470734184"
+        fixed="true"
+        loop="all"
+        order="random"
+        preload="auto"
+        list-folded="ture"
+        list-max-height="500px"
+        lrc-type="1">
+</meting-js>
+
+<th:block th:replace="commons/blogHead::script" ></th:block>
+<script th:src="@{/js/searchViews.js}"></script>
+</body>
+</html>

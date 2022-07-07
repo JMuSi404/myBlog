@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/adminHead::head(~{::title})">
+    <title>博客管理</title>
+</head>
+
+<body>
+<!-- 导航 -->
+<div th:replace="commons/adminHead::top"></div>
+
+<!-- 	主体 -->
+<div class="h-body-bottom h-margin-show h-padded-td-large">
+    <div class="ui container">
+        <div class="h-body-bottom">
+            <center> <h1>欢迎来到后台管理页面</h1></center>
+        </div>
+</div>
+</div>
+
+
+<th:block th:replace="commons/adminHead::script" ></th:block>
+<script>
+    $('.ui .dropdown').dropdown({
+        on:'hover'
+    });
+</script>
+
+</body>
+</html>

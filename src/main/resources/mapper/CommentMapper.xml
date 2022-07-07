@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heshijia.myblog.mapper.CommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.heshijia.myblog.pojo.Comment">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+            <result property="createtime" column="createTime" jdbcType="VARCHAR"/>
+            <result property="blogId" column="blog_id" jdbcType="BIGINT"/>
+            <result property="extendsCommentid" column="extends_commentId" jdbcType="BIGINT"/>
+            <result property="administrator" column="administrator" jdbcType="BIT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,nickname,email,
+        content,avatar,createTime,
+        blog_id,extends_commentId,administrator
+    </sql>
+    <select id="selectByBlogIdAndExtendsCommentidIsNull" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_comment
+        where
+        blog_id = #{blogId,jdbcType=NUMERIC}
+        AND
+        extends_commentId is null
+    </select>
+    <select id="selectByExtendsCommentid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_comment
+        where
+        extends_commentId = #{extendsCommentid,jdbcType=NUMERIC}
+    </select>
+    <delete id="deleteByBlogId">
+        delete
+        from t_comment
+        where blog_id = #{blogId,jdbcType=NUMERIC}
+    </delete>
+    <select id="selectByBlogId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_comment
+        where
+        blog_id = #{blogId,jdbcType=NUMERIC}
+    </select>
+    <delete id="deleteById">
+        delete
+        from t_comment
+        where id = #{id,jdbcType=NUMERIC}
+    </delete>
+
+    <select id="selectCommentCount" resultType="integer">
+        SELECT  COUNT(*) FROM `t_comment`
+    </select>
+    <select id="selectAllById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_comment
+        where
+        id = #{id,jdbcType=NUMERIC}
+    </select>
+</mapper>

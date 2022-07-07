@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/adminHead::head(~{::title})">
+		<title>标签管理</title>
+</head>
+
+	<body>
+	<!-- 导航 -->
+	<div th:replace="commons/adminHead::top"></div>
+
+	<!-- 	主体 -->
+	<div class="h-body-bottom h-margin-show h-padded-td-large">
+	<div class="ui container ">
+        <div  class="ui secondary  form">
+            <div class="fields">
+                <div class="field">
+                    <a th:href="@{/admin/toTagsInput}" class="ui  right floated orange  button">新增标签</a>
+                </div>
+            </div>
+
+
+        </div>
+
+      <div id="table-container">
+        <table  class="ui compact teal table">
+          <thead>
+          <tr>
+            <th>序号</th>
+            <th >标签名</th>
+             <th colspan="7">&nbsp;&nbsp;操作</th>
+          </tr>
+          </thead>
+          <tbody id="tagsList">
+
+          </tbody>
+          <tfoot>
+          <tr>
+			  <th>
+				  <span>总记录数:<b id="tags_total"></b></span>
+			  </th>
+            <th colspan="7" id="tags_page_list">
+
+            </th>
+          </tr>
+          </tfoot>
+        </table>
+
+       <div class="ui success message" style="display: none" th:style="${msg!=null?'display:block;':'display:none;'}">
+          <i class="close icon"></i>
+          <div class="header">提示：</div>
+          <p th:text="${msg}" id="requset_msg"></p>
+           <p id="msg"></p>
+        </div>
+
+      </div>
+
+	</div>
+	</div>
+
+	<th:block th:replace="commons/adminHead::script" ></th:block>
+
+	<script>
+        $(function () {
+            QueryTagsPage();
+        })
+        function QueryTagsPage(PageNum) {
+            $.ajax({
+                url:'/admin/Tags',
+                type: "GET",
+                data:{
+                    "pageNum":PageNum
+                },
+                success:function (data) {
+                    $("#tagsList").empty();
+                    $.each(data.hashMap.TagsPage.records,function (index,item) {
+                        $("<tr></tr>").append(
+                            $('<td></td>').append(index)
+                        ).append(
+                            $("<td></td>").append(item.name)
+                        ).append(
+                            $("<td colspan='7'></td>").append(
+                                $("<a href=\"javascript:;\"  class=\"ui mini teal basic button editTag\">编辑</a>")
+                            ).append(
+                                $("<a href=\"javascript:;\"  class=\"ui mini red basic button deleteTag\">删除</a>")
+                            ).attr("id",item.id)
+                        ).appendTo("#tagsList")
+                    })
+                   $("#tags_total").text(data.hashMap.TagsPage.total);
+
+                    $("#tags_page_list").empty();
+                    var current = data.hashMap.TagsPage.current;
+                     var   div=$("<div class=\"ui mini pagination menu\" ></div>");
+                    div.append($("<a class=\"item\"></a>")
+                        .on("click",function () {
+                            QueryTagsPage(current<=1?current:current-1)
+                        })
+                        .append("上一页"));
+
+                    for (let i=1;data.hashMap.TagsPage.pages>=i;i++){
+                        div.append($("<a class=\"item\"></a>").append(i).addClass(current==i?"active":"")
+                            .on("click",function () {
+                                QueryTagsPage(i)
+                            }));
+                    }
+                    div.append($("<a class=\"item\"></a>")
+                        .on("click",function () {
+                            QueryTagsPage(current>=data.hashMap.TagsPage.pages?current:current+1)
+                        })
+                        .append("下一页"));
+                    div.appendTo("#tags_page_list");
+                }
+            })
+        }
+
+
+        $(document).on("click",".deleteTag",function () {
+            if (confirm("确定删除吗?")){
+                $('#msg').text("");
+                $("#requset_msg").text("");
+            $.ajax({
+                url:'/admin/Tags',
+                type: "POST",
+                data:{
+                    "_method":"DELETE",
+                    "id":$(this).parent().attr("id")
+                },
+                success:function (data) {
+                    if (data.code=="100"){
+                        $('#msg').text("删除成功");
+                        $(".message").attr("style","display:block;");
+                        QueryTagsPage($(".item.active").text());
+                    }else {
+                        $(".message").attr("style","display:block;");
+                        $('#msg').text(data.message);
+                    }
+                }}) }
+        })
+
+
+        $(document).on("click",".editTag",function () {
+          window.location.href="/admin/toTagsEdit?id="+$(this).parent().attr("id");
+        })
+
+		$('.ui .dropdown').dropdown({
+			on:'hover'
+		});
+
+
+        $(".message .close").on("click",function () {
+            $(this).closest(".message")
+            .transition("fade");
+        });
+	</script>
+
+	</body>
+</html>
