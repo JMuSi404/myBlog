@@ -85,6 +85,9 @@ public class Blog implements Serializable {
      */
     private String userName;
 
+    /**
+     * 评论数
+     */
     private  Integer commentCount;
 
     /**
@@ -92,6 +95,10 @@ public class Blog implements Serializable {
      */
     private String description;
 
+    /**
+     * 博客类型
+     */
+    private String type;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

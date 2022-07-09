@@ -72,9 +72,8 @@ public class IndexController {
      */
     @RequestMapping("/toAbout")
     public  String toAbout(Model model){
-        //复用了博客详情页
-        Long id=1532221761548345346L;
-        Blog blog = blogService.queryBlogDetailsById(id);
+        Blog  AboutBlog = blogService.queryBlogDetailsByType("2");
+        Blog blog = blogService.queryBlogDetailsById(AboutBlog.getId());
         model.addAttribute("blog",blog);
         return "blog/about";
     }
@@ -84,9 +83,8 @@ public class IndexController {
      */
     @RequestMapping("/toLink")
     public  String toLink(Model model){
-        //复用了博客详情页
-        Long id=1543806513464799233L;
-        Blog blog = blogService.queryBlogDetailsById(id);
+        Blog linkBlog = blogService.queryBlogDetailsByType("1");
+        Blog blog = blogService.queryBlogDetailsById(linkBlog.getId());
         model.addAttribute("blog",blog);
         return "blog/link";
     }

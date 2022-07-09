@@ -41,7 +41,7 @@
             <button  type="button" id="search-btn" class="ui teal  button"><i class="search icon"></i>搜索</button>
           </div>
 		   <div class="field">
-		     <a th:href="@{/admin/toBlogsInput}" class="ui  right floated orange  button">新增博客</a>
+		     <a th:href="@{/admin/toBlogsInput}" class="ui  right floated orange  button">新增</a>
 		   </div>
         </div>
 		
@@ -53,6 +53,7 @@
           <tr>
             <th></th>
             <th>标题</th>
+            <th>版权</th>
             <th>类型</th>
             <th>推荐</th>
             <th>状态</th>
@@ -128,6 +129,8 @@
                          $("<td></td").append(item.title)
                      ).append(
                          $("<td></td").append(item.flag)
+                     ).append(
+                         $("<td></td").append(item.type=="0"?"文章":item.type=="1"?"友链":"关于我")
                      ).append(
                          $("<td></td").append(item.recommendned?"是":"否")
                      ).append(

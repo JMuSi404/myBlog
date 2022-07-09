@@ -11,14 +11,13 @@
     <!-- 	主体 -->
 	<div class="h-body-bottom h-margin-show h-padded-td-large">
 	<div class="ui container">
-
       <form id="blog-form" th:action="@{/admin/Blogs}" method="post" class="ui form">
           <input name="published" type="hidden" id="published">
           <input name="_method" type="hidden" value="PUT">
           <input name="id" type="hidden" th:value="${blogs.id}">
            <div class="required field">
              <div class="ui left labeled input">
-               <div class="ui selection compact teal basic dropdown label">
+               <div class="ui selection compact teal basic dropdown label" th:if="${blogs.type=='0'}">
                  <input type="hidden" th:value="${blogs.flag}" name="flag">
                  <i class="dropdown icon"></i>
                  <div class="text">原创</div>
@@ -31,18 +30,17 @@
                <input type="text" name="title"  th:value="${blogs.title}" placeholder="标题">
              </div>
            </div>
-   
            <div class="required field">
              <div id="md-content" style="z-index: 1 !important;">
                <textarea placeholder="博客内容" th:text="${blogs.content}"  name="content" style="display: none" ></textarea>
              </div>
            </div>
    
-           <div class="two fields">
+           <div class="two fields" th:if="${blogs.type=='0'}">
                <div class="required field">
                 <div class="ui left labeled input">
                    <label class="ui teal basic label">首图</label>
-                    <input type="text" name="firstPicture"  th:value="${blogs.firstPicture}" placeholder="首图引用地址">
+                    <input type="text" name="firstPicture"th:value="${blogs.firstPicture}" placeholder="首图引用地址">
                      </div>
                 </div>
 				
@@ -60,11 +58,11 @@
                </div>
              </div>
            </div>
-          <div class="required field">
+          <div class="required field" th:if="${blogs.type=='0'}">
               <textarea name="description" placeholder="博客描述..." maxlength="200" th:text="${blogs.description}"></textarea>
           </div>
            <div class="inline fields">
-             <div class="field">
+             <div class="field" th:if="${blogs.type=='0'}">
                <div class="ui checkbox">
                  <input type="checkbox" id="recommend" name="recommendned"  th:checked="${blogs.recommendned?'true':'false'}"  class="hidden">
                  <label for="recommend">推荐</label>
@@ -82,7 +80,7 @@
            <div class="ui right aligned container">
              <button type="button" class="ui button" onclick="window.history.go(-1)" >返回</button>
              <button type="button"  id="save-btn" class="ui secondary button">保存</button>
-             <button type="button" id="publish-btn" class="ui teal button">发布</button>
+             <button type="button" th:if="${blogs.type=='0'}" id="publish-btn" class="ui teal button">发布</button>
            </div>
    
          </form>
@@ -114,41 +112,6 @@
 		      $('[name="published"]').val(true);
 		      $('#blog-form').submit();
 		    });
-
-		
-		$('.ui.form').form({
-		     fields : {
-		       title : {
-		         identifier: 'title',
-		         rules: [{
-		           type : 'empty',
-		           prompt: '请输入博客标题'
-		         }]
-		       },
-			           content : {
-			             identifier: 'content',
-			             rules: [{
-			               type : 'empty',
-			               prompt: '请输入博客内容'
-			             }]
-			           },
-		       firstPicture : {
-		         identifier: 'firstPicture',
-		         rules: [{
-		           type : 'empty',
-		           prompt: '请输入博客首图'
-		         }]
-		       },
-			           typeId : {
-			             identifier: 'tagIds',
-			             rules: [{
-			               type : 'empty',
-			               prompt: '请选择标签'
-			             }]
-			           }
-		     }
-		   });
-		   
 		        $('.ui .dropdown').dropdown({
 					on:'hover'
 				});

@@ -58,18 +58,19 @@ public class BlogsController {
     @RequestMapping ("/toEditBlogs")
     public String toEditBlogs(String id,Model model){
         Blog blog = blogServiceimpl.queryBlogById(Long.parseLong(id));
-        System.out.println(blog);
-        List<Tag> tag = tagService.queryTagListByBlogId(Long.parseLong(id));
-        List<Tag> tags = tagService.queryTagList();
-        String ids="";
-        for (Tag t : tag) {
-            ids+=t.getId()+",";
+        if (blog.getType().equals("0")) {
+            List<Tag> tag = tagService.queryTagListByBlogId(Long.parseLong(id));
+            List<Tag> tags = tagService.queryTagList( );
+            String ids = "";
+            for (Tag t : tag) {
+                ids += t.getId( ) + ",";
+            }
+            if (ids != null && ids != "") {
+                String substringId = ids.substring(0 , ids.lastIndexOf(","));
+                model.addAttribute("ids" , substringId);
+            }
+            model.addAttribute("tags" , tags);
         }
-        if (ids!=null&&ids!=""){
-            String substringId = ids.substring(0,ids.lastIndexOf(","));
-            model.addAttribute("ids",substringId);
-        }
-        model.addAttribute("tags",tags);
         model.addAttribute("blogs",blog);
         return "admin/blogs-edit";
     }
@@ -80,29 +81,37 @@ public class BlogsController {
     @PostMapping("/Blogs")
     public String saveBlogs(Blog blog, String tagIds, HttpSession session, RedirectAttributes redirectAttributes){
    try{
+       if (!"0".equals(blog.getType())) {
+           if (blogServiceimpl.queryBlogByType(blog.getType()).size( ) > 0) {
+               redirectAttributes.addFlashAttribute("msg" , "1".equals(blog.getType())?"友链页已经存在,请勿重复添加":"关于我页已经存在,请勿重复添加");
+               return "redirect:/admin/toBlogs";
+           }
+       }
        blog.setRecommendned(blog.getRecommendned()==null?false:true);
        blog.setCommentabled(blog.getCommentabled()==null?false:true);
     blog.setCreatetime(DateTimeFormatUtils.getDateTime(new Date()));
     User user =(User) session.getAttribute(SessionInfo.LOGIN_INFO);
     blog.setUserId(user.getId());
     blog.setViews(0);
-    int i = blogServiceimpl.saveBlog(blog);
+       int i = blogServiceimpl.saveBlog(blog);
     if (i>0){
+        if (tagIds!=null&&tagIds!=""){
         String[] ids = tagIds.split(",");
         for (String id : ids) {
             int j = blogTagRelationService.saveBlogTagRelation(new BlogTagRelation(null , blog.getId( ) , Long.parseLong(id)));
             if (j<=0){
-                redirectAttributes.addFlashAttribute("msg","添加博客标签失败");
+                redirectAttributes.addFlashAttribute("msg","添加标签失败");
                 return  "redirect:/admin/toBlogs";
             }
         }
-        redirectAttributes.addFlashAttribute("msg","添加博客成功");
+        }
+        redirectAttributes.addFlashAttribute("msg","添加成功");
     }else {
-        redirectAttributes.addFlashAttribute("msg","添加博客失败");
+        redirectAttributes.addFlashAttribute("msg","添加失败");
     }
     }catch (Exception e){
         e.printStackTrace();
-        redirectAttributes.addFlashAttribute("msg","系统暂忙,修改失败,请稍后再试");
+        redirectAttributes.addFlashAttribute("msg","系统暂忙,添加失败,请稍后再试");
         return  "redirect:/admin/toBlogs";
     }
         return  "redirect:/admin/toBlogs";
@@ -173,9 +182,9 @@ public class BlogsController {
             blog.setEdittime(DateTimeFormatUtils.getDateTime(new Date()));
             int i = blogServiceimpl.editBlogs(blog , tagIds);
             if (i>0){
-                redirectAttributes.addFlashAttribute("msg","修改博客成功");
+                redirectAttributes.addFlashAttribute("msg","修改成功");
             }else {
-                redirectAttributes.addFlashAttribute("msg","修改博客失败");
+                redirectAttributes.addFlashAttribute("msg","修改失败");
             }
         }catch (Exception e){
             e.printStackTrace();

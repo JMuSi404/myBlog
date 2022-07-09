@@ -81,4 +81,8 @@ public interface BlogService extends IService<Blog> {
      Map<String,Object>  selectCount();
 
      Boolean updateNumById(Blog blog);
+
+     List<Blog> queryBlogByType (String type);
+
+     Blog queryBlogDetailsByType(String type);
 }

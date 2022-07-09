@@ -25,6 +25,7 @@ public interface BlogMapper extends BaseMapper<Blog> {
 
   Blog selectBlogDetailsById(@Param ( "id" ) Long id);
 
+
   List<Blog> selectBlogByTagId(Long id);
 
   List<String> selectBlogYear();
@@ -39,6 +40,9 @@ public interface BlogMapper extends BaseMapper<Blog> {
 
    Integer  selectBlogViewsCount();
 
+  List<Blog> selectByType (@Param ( "type" ) String type);
+
+  Blog selectBlogIdByType(@Param ( "type" ) String type);
 
 }
 

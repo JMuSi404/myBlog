@@ -45,7 +45,8 @@
 					  <span id="TagList" class="ui"></span>
 				  </div> 
 			</div>
-			
+			<!--					博客Id-->
+			<input type="hidden" name="BlogId" th:value="${blog.id}">
 			
 			
 			<div class="ui bottom attached" th:if="${blog.commentabled}">
@@ -62,9 +63,6 @@
 
 			<!-- 	评论区 -->
 				<div class="ui form" id="comment_form" >
-<!--					博客Id-->
-					<input type="hidden" name="BlogId" th:value="${blog.id}">
-
 					<input type="hidden" name="ParentCommentId">
 					  <div class="field">
 					    <textarea name="content" placeholder="输入评论信息...."></textarea>

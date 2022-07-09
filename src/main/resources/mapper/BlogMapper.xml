@@ -20,18 +20,18 @@
             <result property="userName" column="user_name" jdbcType="VARCHAR"/>
             <result property="description" column="description" jdbcType="VARCHAR"></result>
         <result property="commentCount" column="comment_count" jdbcType="INTEGER"></result>
-
+        <result property="type" column="type" jdbcType="VARCHAR"></result>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,title,content,
         first_Picture,flag,views,
         commentabled,published,recommendned,
-        createTime,editTime,user_id,user_name,description,comment_count
+        createTime,editTime,user_id,user_name,description,comment_count,type
     </sql>
 
     <select id="selectBlogConditionPage" resultMap="BaseResultMap" parameterType="map">
-        SELECT tb.id,tb.title,tb.flag,tb.published,tb.recommendned,tb.editTime,tb.createTime FROM `t_blog` tb
+        SELECT tb.id,tb.title,tb.flag,tb.published,tb.recommendned,tb.editTime,tb.createTime,tb.type FROM `t_blog` tb
         <if test="tagIdConditions !=null and tagIdConditions != '' ">
         JOIN t_blog_tag_relation tbr ON tbr.blog_id=tb.id
         JOIN t_tag  tt ON  tbr.tag_id=tt.id
@@ -63,7 +63,7 @@
                  t_blog tb
                 JOIN t_user tu ON tu.id=tb.user_id
                 left	JOIN t_comment tc ON tc.blog_id=tb.id
-        WHERE tb.published=1
+        WHERE tb.published=1 and tb.type=0
         GROUP BY tb.id
         ORDER BY tb.recommendned desc,tb.createTime desc
     </select>
@@ -74,7 +74,7 @@
          JOIN t_user tu ON tu.id=tb.user_id
           left	JOIN t_comment tc ON tc.blog_id=tb.id
         WHERE tb.title LIKE CONCAT('%',#{condition},'%')
-          and tb.published=1
+          and tb.published=1 and tb.type=0
         GROUP BY tb.id
         ORDER BY tb.recommendned desc,tb.createTime desc
     </select>
@@ -94,12 +94,10 @@
         JOIN t_tag  tt ON  tbr.tag_id=tt.id
         JOIN t_user tu ON tb.user_id=tu.id
         left	JOIN t_comment tc ON tc.blog_id=tb.id
-        <where>
-        tb.published=1
+        where  tb.published=1 and tb.type=0
         <if test="id !=null and id!='' and id!='0'">
             and tbr.tag_id=#{id}
         </if>
-        </where>
         GROUP BY tb.id
         ORDER BY tb.recommendned desc,tb.createTime desc
     </select>
@@ -115,7 +113,7 @@
          user_name,description,DATE_FORMAT(createTime,'%m-%d') as createTime
         FROM `t_blog`
         WHERE DATE_FORMAT(createTime,'%Y')=#{year}
-        and   published=1
+        and   published=1 and type=0
         ORDER BY createTime desc
     </select>
     <update id="updateViewsById">
@@ -135,6 +133,21 @@
 
     <select id="selectBlogViewsCount" resultType="integer">
         select   SUM(views)  from t_blog
+    </select>
+
+    <select id="selectByType" resultMap="BaseResultMap">
+        select
+        id
+        from t_blog
+        where
+        type = #{type,jdbcType=VARCHAR}
+    </select>
+    <select id="selectBlogIdByType" resultMap="BaseResultMap">
+        select
+          id
+        from t_blog
+        where
+        type = #{type,jdbcType=VARCHAR}
     </select>
 
 </mapper>

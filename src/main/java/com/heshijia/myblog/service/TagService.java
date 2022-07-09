@@ -1,6 +1,7 @@
 package com.heshijia.myblog.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.heshijia.myblog.pojo.Blog;
 import com.heshijia.myblog.pojo.Tag;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
@@ -83,4 +84,6 @@ public interface TagService extends IService<Tag> {
      * @return
      */
    Integer queryTagCount();
+
+
 }

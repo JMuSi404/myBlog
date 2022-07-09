@@ -14,9 +14,30 @@
 
       <form id="blog-form" th:action="@{/admin/Blogs}" method="post" class="ui form">
           <input name="published" type="hidden" id="published">
+          <div class="field">
+              <div class="ui selection dropdown" id="blogType">
+                  <input type="hidden" value="0" name="type">
+                  <i class="dropdown icon"></i>
+                  <div class="text">文章详情页</div>
+                  <div class="menu">
+                      <div class="item" data-value="0">
+                          <i class="visa icon"></i>
+                          文章详情页
+                      </div>
+                      <div class="item" data-value="1">
+                          <i class="amex icon"></i>
+                          友链列表页
+                      </div>
+                      <div class="item" data-value="2">
+                          <i class="discover icon"></i>
+                          关于我页
+                      </div>
+                  </div>
+              </div>
+          </div>
            <div class="required field">
-             <div class="ui left labeled input">
-               <div class="ui selection compact teal basic dropdown label">
+             <div class="ui  labeled input">
+               <div class="ui selection compact teal basic dropdown label blog_hidden">
                  <input type="hidden" value="原创" name="flag" >
                  <i class="dropdown icon"></i>
                  <div class="text">原创</div>
@@ -36,7 +57,7 @@
              </div>
            </div>
    
-           <div class="two fields">
+           <div class="two fields blog_hidden">
                <div class="required field">
                 <div class="ui left labeled input">
                    <label class="ui teal basic label">首图</label>
@@ -60,12 +81,12 @@
         
            </div>
 
-          <div class="required field">
+          <div class="required field blog_hidden">
               <textarea name="description" placeholder="博客描述..." maxlength="200"></textarea>
           </div>
 
            <div class="inline fields">
-             <div class="field">
+             <div class="field blog_hidden">
                <div class="ui checkbox">
                  <input type="checkbox" id="recommend" name="recommendned"  class="hidden">
                  <label for="recommend">推荐</label>
@@ -81,10 +102,10 @@
    
            <div class="ui error message"></div>
    
-           <div class="ui right aligned container">
+           <div class="ui right aligned container" >
              <button type="button" class="ui button" onclick="window.history.go(-1)" >返回</button>
              <button type="button"  id="save-btn" class="ui secondary button">保存</button>
-             <button type="button" id="publish-btn" class="ui teal button">发布</button>
+             <button type="button" id="publish-btn" class="ui  teal button blog_hidden">发布</button>
            </div>
    
          </form>
@@ -116,48 +137,6 @@
 		      $('[name="published"]').val(true);
 		      $('#blog-form').submit();
 		    });
-
-		
-		$('.ui.form').form({
-		     fields : {
-		       title : {
-		         identifier: 'title',
-		         rules: [{
-		           type : 'empty',
-		           prompt: '请输入博客标题'
-		         }]
-		       },
-			           content : {
-			             identifier: 'content',
-			             rules: [{
-			               type : 'empty',
-			               prompt: '请输入博客内容'
-			             }]
-			           },
-                 description:{
-                     identifier: 'description',
-                     rules: [{
-                         type : 'empty',
-                         prompt: '请输入博客描述'
-                     }]
-                 },
-		       firstPicture : {
-		         identifier: 'firstPicture',
-		         rules: [{
-		           type : 'empty',
-		           prompt: '请输入博客首图'
-		         }]
-		       },
-			           typeId : {
-			             identifier: 'tagIds',
-			             rules: [{
-			               type : 'empty',
-			               prompt: '请选择标签'
-			             }]
-			           }
-		     }
-		   });
-		   
 		        $('.ui .dropdown').dropdown({
 					on:'hover'
 				});
@@ -170,6 +149,16 @@
             $("#published").val(false);
             $("#blog-form").submit();
         })
+
+        $(document).on("change","#blogType",function () {
+            console.log($('[name="type"]').val());
+            if ($('[name="type"]').val()!="0"){
+                $(".blog_hidden").hide("slow");
+            }else {
+                $(".blog_hidden").show("slow");
+            }
+        })
+
 		</script>
 	</body>
 </html>

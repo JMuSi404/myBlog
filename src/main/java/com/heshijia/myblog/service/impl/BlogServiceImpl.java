@@ -81,8 +81,8 @@ private BlogTagRelationMapper blogTagRelationMapper;
     public int editBlogs (Blog blog,String tagIds) {
         blogTagRelationMapper.deleteByBlogId(blog.getId());
             int j = blogMapper.updateById(blog);
-            System.out.println("j "+j );
             if (j>0){
+                if (tagIds!=null&&tagIds!=""){
                 String[] ids = tagIds.split(",");
                 for (String id : ids) {
                    int k=blogTagRelationMapper.insert(new BlogTagRelation(null , blog.getId( ) , Long.parseLong(id)));
@@ -90,6 +90,7 @@ private BlogTagRelationMapper blogTagRelationMapper;
                        return k;
                    }
                 }
+            }
             }
             return j;
     }
@@ -99,10 +100,13 @@ private BlogTagRelationMapper blogTagRelationMapper;
         Blog blog = blogMapper.selectBlogDetailsById(id);
         String content = blog.getContent( );
         blog.setContent(MarkDownUtils.markdownToHtmlExtensions(content));
-//            blogMapper.updateViewsById((blog.getViews()+1),blog.getId());
         return blog;
     }
-
+    @Override
+    public Blog queryBlogDetailsByType(String type){
+        Blog blog = blogMapper.selectBlogIdByType(type);
+        return blog;
+    }
     @Override
     public Map<String, List<Blog>> queryBlogArchive ( ) {
         Map<String, List<Blog>> Map = new HashMap<>(  );
@@ -131,6 +135,11 @@ private BlogTagRelationMapper blogTagRelationMapper;
     @Override
     public Boolean updateNumById (Blog blog) {
         return  blogMapper.updateViewsById(blog.getViews(),blog.getId())>1;
+    }
+
+    @Override
+    public List<Blog> queryBlogByType (String type) {
+        return blogMapper.selectByType(type);
     }
 
 

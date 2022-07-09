@@ -97,13 +97,11 @@ public  Object  addComment(Comment comment, HttpSession session){
         try {
             SimpleMailMessage message = new SimpleMailMessage( );
             Blog blog = blogServiceimpl.queryBlogById(comment.getBlogId( ));
-            System.out.println(blog.getId());
             String url="https://www.hsjhome.top/" +"toBlog/"+ blog.getId( );
-            Long toAbout=1532221761548345346L;
-            Long toLink=1543806513464799233L;
-            if (blog.getId( ).equals(toAbout)){
+
+            if (blog.getType().equals("2")){
                 url="https://www.hsjhome.top/toAbout";
-            }else if (blog.getId( ).equals(toLink)){
+            }else if (blog.getType().equals("1")){
                 url="https://www.hsjhome.top/toLink";
             }
             if (comment.getExtendsCommentid( ) != null && comment.getExtendsCommentid( ) != 0) {
