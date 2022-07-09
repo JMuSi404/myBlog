@@ -1,0 +1,7 @@
+设置了外键,导入sql的时候得按顺序来
+顺序为
+1.t_user
+2.t_tag
+3.t_blog
+4.t_blog_tag_relation
+5.t_comment
