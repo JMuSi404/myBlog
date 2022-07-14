@@ -4,8 +4,8 @@ spring:
     druid:
       url: jdbc:mysql://localhost:3306/blog?useSSL=false&serverTimezone=GMT%2B8
       driver-class-name: com.mysql.cj.jdbc.Driver
-      username: XXX
-      password: XXX
+      username: xxx
+      password: xxx
 
 #视图解析器配置
   mvc:
@@ -23,9 +23,9 @@ spring:
 # 主机地址
     host: smtp.163.com
 # 邮箱名
-    username: XXX
+    username: xxx
 # 授权码（不是密码）
-    password: XXX
+    password: xxx
 # redis配置
   redis:
     host: 127.0.0.1
@@ -38,7 +38,7 @@ spring:
         max-idle: 10
         min-idle: 0
     timeout: 1000
-    password: XXX
+    password: xxxx
 
 #mybatis-plus配置
 mybatis-plus:

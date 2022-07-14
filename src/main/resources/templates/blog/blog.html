@@ -33,9 +33,12 @@
 				</div>
 		<!-- 	内容 -->
 			<div class="ui segment h-boder-radius">
-			<h2 class="ui center aligned header" th:text="${blog.title}"></h2>
+<!--			<h2 class="ui center aligned header" th:text="${blog.title}"></h2>-->
+				<h1 class="ui   dividing  header">
+					<div class="content">[[${blog.title}]]</div>
+				</h1>
 			<!-- 文章内容 -->
-			<div id="content" class="typo typo-selection js-toc-content h-padded-lr " th:utext="${blog.content}">
+			<div id="content" class="typo typo-selection  js-toc-content h-padded-lr " th:utext="${blog.content}">
 
 			</div>
 				  <!-- 标签 -->
@@ -43,7 +46,14 @@
 					<br>
 					  <div class="ui  basic label" th:text="${blog.flag}" th:classappend="${blog.flag eq '原创'} ? 'teal':'red'"></div>
 					  <span id="TagList" class="ui"></span>
-				  </div> 
+				  </div>
+				<div class="ui floating message">
+
+				     	<p>文章作者：<a th:href="@{/}">[[${blog.userName}]]</a></p>
+						<p>文章链接：<a th:href="${'/toBlog/'+blog.id}" style=" word-wrap: break-word;">http://www.hsjhome.top/toBlog/[[${blog.id}]]</a></p>
+						<p>版权声明：本站文章等内容仅代表作者本人的个人观点，本站不保证文章等内容的真实性和有效性。转载请注明文章出处。</p>
+				</div>
+
 			</div>
 			<!--					博客Id-->
 			<input type="hidden" name="BlogId" th:value="${blog.id}">
@@ -430,7 +440,14 @@ function eachList(eachlist,commentsDiv){
 				$("[name='ParentCommentId']").val("");
 			}
 
-
+			$('.message .close')
+					.on('click', function() {
+						$(this)
+								.closest('.message')
+								.transition('fade')
+						;
+					})
+			;
 		</script>
 	</body>
 </html>

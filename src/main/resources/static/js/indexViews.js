@@ -1,5 +1,5 @@
 $(function () {
-    $("#indexBackground").attr("style","margin-top: 70px;background: url('/img/b"+Math.round(Math.random()*(6-1)+1)+".jpg') center/cover no-repeat;")
+    $("#indexBackground").attr("style","margin-top: 60px;background: url('/img/b"+Math.round(Math.random()*(6-1)+1)+".jpg') center/cover no-repeat;")
     RandomlyGetFamousQuotes();
     BlogsShowList();
     TagShowList();

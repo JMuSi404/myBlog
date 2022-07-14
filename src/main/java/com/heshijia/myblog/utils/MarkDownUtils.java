@@ -3,6 +3,7 @@ import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TableBlock;
 import org.commonmark.ext.gfm.tables.TablesExtension;
 import org.commonmark.ext.heading.anchor.HeadingAnchorExtension;
+import org.commonmark.node.Code;
 import org.commonmark.node.Link;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
@@ -66,6 +67,9 @@ public class MarkDownUtils {
             }
             if (node instanceof TableBlock) {
                 attributes.put("class", "ui celled table");
+            }
+            if (node instanceof Code){
+                attributes.put("class", "language-markup");
             }
         }
     }

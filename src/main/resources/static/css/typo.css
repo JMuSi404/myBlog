@@ -115,16 +115,13 @@
 
 /* 让链接在 hover 状态下显示下划线 */
 .typo a {
-  color: #1abc9c;
+  color: #1a76bc;
 }
 
 .typo a:hover {
   text-decoration: underline;
 }
 
-.typo a {
-  border-bottom: 1px solid #1abc9c;
-}
 
 .typo a:hover {
   border-bottom-color: #555;
@@ -149,7 +146,6 @@
 
 /* 标记，类似于手写的荧光笔的作用 */
 .typo mark {
-  background: #fffdd1;
   border-bottom: 1px solid #ffedce;
   padding: 2px;
   margin: 0 5px;
@@ -165,6 +161,7 @@
   border: 1px solid #ddd;
   padding: 1em 1.5em;
   display: block;
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
 

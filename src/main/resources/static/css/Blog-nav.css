@@ -109,6 +109,11 @@
 	box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
 }
 
+.navigation_height{
+	height: 55px !important;
+}
+
+
 /* display */
 .h-inline-block{
 	display: inline-block !important; 
@@ -156,6 +161,10 @@
 	#p_title{
 		width: 400px !important;
 	}
+	.navigation_height{
+		height: auto !important;
+	}
+
 
 
 	#scroll_down_btn{
@@ -186,5 +195,8 @@
 @media screen and (max-width:1280px) {
 	.h-margin-show{
        margin: auto;
+	}
+	.navigation_height{
+		height: auto !important;
 	}
 }
