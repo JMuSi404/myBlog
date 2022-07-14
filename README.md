@@ -15,7 +15,7 @@
  
 **2.后端**
  - 核心框架:SpringBoot 2.7.0+MybatisPlus
- - 数据库:mysqk、redis
+ - 数据库:mysql、redis
  - 项目构建:jdk1.8、maven 3
  - 模板引擎:thymeleaf
  - 分页插件:PageHelper
