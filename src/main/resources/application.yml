@@ -4,8 +4,8 @@ spring:
     druid:
       url: jdbc:mysql://localhost:3306/blog?useSSL=false&serverTimezone=GMT%2B8
       driver-class-name: com.mysql.cj.jdbc.Driver
-      username: xxx
-      password: xxx
+      username: 数据库账号
+      password: 数据库密码
 
 #视图解析器配置
   mvc:
@@ -16,16 +16,16 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
-
+#SpringBoot整合Email 邮件发送
 #评论邮件回复配置
   mail:
     default-encoding: utf-8
 # 主机地址
     host: smtp.163.com
 # 邮箱名
-    username: xxx
+    username: 邮箱名
 # 授权码（不是密码）
-    password: xxx
+    password: 授权码
 # redis配置
   redis:
     host: 127.0.0.1
@@ -38,7 +38,7 @@ spring:
         max-idle: 10
         min-idle: 0
     timeout: 1000
-    password: xxxx
+    password: redis密码
 
 #mybatis-plus配置
 mybatis-plus:
