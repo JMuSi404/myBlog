@@ -71,10 +71,10 @@ public class ListenHandler {
         });
     }
 
+
     /**
      * 关闭时操作
       */
-/**
      @PreDestroy
      public void afterDestroy()  {
      log.info("开始关闭...");
@@ -83,5 +83,5 @@ public class ListenHandler {
      writeNum(viewNum, VIEW_KEY);
      log.info("redis写入数据库完毕");
      }
- */
+
 }

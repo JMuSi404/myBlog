@@ -1,5 +1,5 @@
 $(function () {
-    $("#indexBackground").attr("style","margin-top: 60px;background: url('/img/b"+Math.round(Math.random()*(6-1)+1)+".jpg') center/cover no-repeat;")
+    $("#indexBackground").attr("style","margin-top: 60px;background: url('/img/b"+Math.round(Math.random()*(6-1)+1)+".jpg')  center center / cover no-repeat;")
     RandomlyGetFamousQuotes();
     BlogsShowList();
     TagShowList();
@@ -34,11 +34,12 @@ $(function () {
     $.ajax({
         url:"https://v1.hitokoto.cn/",
         data:{
-            Cati:"d"
+            Cati:"d",
+            max_length:"20"
         },
         type:"GET",
         success:function (data){
-            $("#p_title").text(data.hitokoto);
+            $("#p-title").text(data.hitokoto);
         }
     })}
 

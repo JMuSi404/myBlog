@@ -382,6 +382,41 @@
         $("[name='content']").val("");
         $("[name='ParentCommentId']").val("");
     }
+    $('.special.cards .image').dimmer({
+        on: 'hover'
+    });
+
+    /**
+     * 加入书签
+     * @param url
+     * @param title
+     * @returns {boolean}
+     */
+    function addBookmark(url, title){
+        if (!url) {url = window.location}
+        if (!title) {title = document.title}
+        var browser=navigator.userAgent.toLowerCase();
+        if (window.sidebar) { // Mozilla, Firefox, Netscape
+            window.sidebar.addPanel(title, url,"");
+        } else if( window.external) { // IE or chrome
+            if (browser.indexOf('chrome')==-1){ // ie
+                window.external.AddFavorite( url, title);
+            } else { // chrome
+                alert('Chrome、Edge和Safari出于安全考虑，不支持通过JavaScript添加书签，必须按Ctrl+D手动添加');
+            }
+        }
+        else if(window.opera && window.print) { // Opera - automatically adds to sidebar if rel=sidebar in the tag
+            return true;
+        }
+        else if (browser.indexOf('konqueror')!=-1) { // Konqueror
+            alert('Please press CTRL+B to bookmark this page.');
+        }
+        else if (browser.indexOf('webkit')!=-1){ // safari
+            alert('Please press CTRL+B (or Command+D for macs) to bookmark this page.');
+        } else {
+            alert('Your browser cannot add bookmarks using this link. Please add this link manually.')
+        }
+    }
 </script>
 </body>
 </html>
