@@ -317,6 +317,7 @@ color: var(--info)
 }
 
 
+
 .d-web-info-box:hover{
     box-shadow: var(--box-border-hover);
 }

@@ -11,26 +11,30 @@
 
 			<!-- 	主体 -->
 	<div class="h-body-bottom h-padded-td-big animate__animated animate__fadeIn" id="blogbody">
+
 		<div class="ui container">
 			<!-- 头部 -->
 			<div class="ui top attached">
 				<div class="ui mini horizontal link list">
-						<div class="item">
-							<div class="content">
-								<span class="header"><i class = "user outline red icon" ></i>&nbsp;[[${blog.userName}]]</span>
-							</div>
+					<div class="item">
+						<div class="content">
+							<span class="header"><i class = "user outline red icon" ></i>&nbsp;[[${blog.userName}]]</span>
 						</div>
-						<div class="item">
-							<i class="eye green icon"></i>&nbsp;[[${blog.views}]]
-						</div>
-						<div class="item">
-							<i class="edit blue icon"></i>&nbsp;[[${blog.edittime!=null && blog.edittime!=''?blog.edittime:blog.createtime}]]
-						</div>
+					</div>
+					<div class="item">
+						<i class="eye green icon"></i>&nbsp;[[${blog.views}]]
+					</div>
+					<div class="item">
+						<i class="edit blue icon"></i>&nbsp;[[${blog.edittime!=null && blog.edittime!=''?blog.edittime:blog.createtime}]]
+					</div>
 					<div class="item">
 						<i class="comment alternate outline orange icon"></i>&nbsp;[[${blog.commentCount}]]
 					</div>
-					</div>
 				</div>
+			</div>
+
+			<div class="ui stackable grid">
+				<div class="fourteen wide column">
 		<!-- 	内容 -->
 			<div class="ui segment h-boder-radius">
 <!--			<h2 class="ui center aligned header" th:text="${blog.title}"></h2>-->
@@ -104,16 +108,19 @@
 				</div>
 			</div>
 		</div>
+<!--				目录-->
+				<div class="two wide column">
+					<div class="h-moblile-hide" style="position: sticky;top: 100px;">
+						<div  style="width: 300px">
+							<ol class="js-toc">
+							</ol>
+						</div>
+					</div>
+				</div>
+		</div>
+		</div>
 	</div>
-	<!-- 目录 -->
-	<div class="h-padded h-fixed h-right-top h-moblile-hide animate__animated animate__headShake">
-    <a title="目录" href="javascript:;"  class="ui toc  icon button h-margin-bottom-mini listBtn" ><i class="list ul blue icon"></i></a>
-	</div>
-	<!-- 目录列表 -->
-	<div class="ui toc-container flowing popup transition hidden" style="width: 170px !important;">
-	<ol class="js-toc">
-	</ol>
-	 </div>
+
 	<!--		回到顶部-->
 	<div id="backToTheTop" class="h-padded h-fixed h-right-bottom " style="display: none">
 		<a title="回到顶部" href="javascript:;" class="ui icon button topBtn"><i class="angle up blue icon"></i></a>
@@ -136,11 +143,9 @@
 	<th:block th:replace="commons/blogHead::script" ></th:block>
 
 		<script th:inline="javascript">
-
 			$(document).on("click","#backToTheTop",function () {
 				$(window).scrollTo(0,500);
 			})
-
 			var waypoint = new Waypoint({
 				element: document.getElementById('blogbody'),
 				handler: function(direction) {
@@ -156,11 +161,6 @@
 					}
 				}
 			})
-			$(".toc.button").popup({
-				popup:$('.toc-container.popup'),
-				on:"click",
-				position:"left center"
-			})
 			tocbot.init({
 				// Where to render the table of contents.
 				tocSelector: '.js-toc',
@@ -170,6 +170,8 @@
 				headingSelector: 'h1, h2, h3',
 				// For headings inside relative or absolute positioned containers within content.
 				hasInnerContainers: true,
+				headingsOffset: 60,
+				scrollSmoothOffset: -60
 			});
 			$(document).on("keyup","#Search_for_articles",function () {
 				if(event.keyCode==13){

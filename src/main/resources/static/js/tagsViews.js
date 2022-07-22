@@ -3,7 +3,7 @@ $(function () {
         blogTagsShowList(null,null,$("#TagidHide").val());
     }else {
         $(".tagsBtn").each(function () {
-            $(this).attr("style","font-size:"+Math.round(Math.random()*(30-16)+16)+"px")
+            $(this).attr("style","font-size:"+Math.round(Math.random()*(30-15)+15)+"px;");
         })
         $("#tagsList").attr("style","display: block");
     }
