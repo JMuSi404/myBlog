@@ -38,7 +38,7 @@ spring:
         max-idle: 10
         min-idle: 0
     timeout: 1000
-    password: redis密码
+    password: redis密码,没有可不填
 
 #mybatis-plus配置
 mybatis-plus:
