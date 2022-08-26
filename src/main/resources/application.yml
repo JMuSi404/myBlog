@@ -19,13 +19,13 @@ spring:
         enabled: true
 
 #SpringBoot整合Email 邮件发送
-#邮箱及授权码的获得可以参考csdn 爱打羽球的码猿的'Springboot发送邮件'文章
+#配置可以参考csdn 爱打羽球的码猿的'Springboot发送邮件'文章
 #链接:https://blog.csdn.net/weixin_46822367/article/details/123893527
 #评论邮件回复配置
   mail:
     default-encoding: utf-8
-# 主机地址 我使用的是163邮箱,qq邮箱为 smtp.qq.com
-    host: smtp.163.com
+# 主机地址 163邮箱smtp.163.com,qq邮箱为 smtp.qq.com
+    host: xxxx
 #发送方邮件名
     username: 邮箱名
 # 授权码（不是密码）
