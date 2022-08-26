@@ -1,8 +1,9 @@
 #数据源配置
+#按你本机数据库账号密码以及所属的数据库配置
 spring:
   datasource:
     druid:
-      url: jdbc:mysql://localhost:3306/blog?useSSL=false&serverTimezone=GMT%2B8
+      url: jdbc:mysql://localhost:3306/xxx?useSSL=false&serverTimezone=GMT%2B8
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: 数据库账号
       password: 数据库密码
@@ -16,17 +17,25 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+
 #SpringBoot整合Email 邮件发送
+#配置可以参考csdn 爱打羽球的码猿的'Springboot发送邮件'文章
+#链接:https://blog.csdn.net/weixin_46822367/article/details/123893527?ops_request_misc=&request_id=&biz_id=102&utm_term=springboot%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-0-123893527.nonecase&spm=1018.2226.3001.4187
 #评论邮件回复配置
   mail:
     default-encoding: utf-8
-# 主机地址
+# 主机地址 我使用的是163邮箱,qq邮箱为 smtp.qq.com
     host: smtp.163.com
-# 邮箱名
+#发送方邮件名
     username: 邮箱名
 # 授权码（不是密码）
     password: 授权码
+
 # redis配置
+#如果不会或者没有安装redis的,可以将这几行redis配置注释掉,然后在java代码中也需要注释掉一些代码,不然会报错,redis实现的只是一个博客浏览量功能而已
+#需要注释掉的java类地址:
+#1. com.heshijia.myblog.aspect.RedisAspect
+#2. com.heshijia.myblog.handler.ListenHandler
   redis:
     host: 127.0.0.1
     port: 6379
@@ -60,15 +69,15 @@ logging:
   file:
     path: log/blog/
 
-#邮件发送内容信息配置
+#邮件发送内容信息配置 (com.heshijia.myblog.utils.MailDataUtils)
 myblog_mail:
-  #域名
-  domain_name:
-  #邮件发送者
-  mail_sender:
-  #邮件抄送 所有邮件都抄送一份到抄送邮箱
-  mail_cc:
+  #域名 填你的域名
+  domain_name: xxx
+  #邮件发送者 为评论邮件回复配置的发送方邮件名
+  mail_sender: xxx
+  #邮件抄送 所有邮件都抄送一份到抄送这个邮箱
+  mail_cc: xxx
   #邮件标题
-  mail_title:
+  mail_title: '你有一条新消息'
 
 
