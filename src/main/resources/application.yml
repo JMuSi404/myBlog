@@ -60,6 +60,7 @@ logging:
   file:
     path: log/blog/
 
+#邮件发送内容信息配置
 myblog_mail:
   #域名
   domain_name:
