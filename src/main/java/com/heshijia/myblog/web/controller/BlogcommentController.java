@@ -1,25 +1,27 @@
 package com.heshijia.myblog.web.controller;
 
-import com.heshijia.myblog.pojo.Blog;
-import com.heshijia.myblog.pojo.Comment;
-import com.heshijia.myblog.pojo.Msg;
-import com.heshijia.myblog.pojo.User;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.heshijia.myblog.pojo.*;
 import com.heshijia.myblog.service.impl.BlogServiceImpl;
 import com.heshijia.myblog.service.impl.CommentServiceImpl;
-import com.heshijia.myblog.utils.DateTimeFormatUtils;
-import com.heshijia.myblog.utils.MsgCode;
-import com.heshijia.myblog.utils.SessionInfo;
+import com.heshijia.myblog.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class BlogcommentController {
@@ -30,6 +32,8 @@ public class BlogcommentController {
     BlogServiceImpl blogServiceimpl;
     @Autowired
     private JavaMailSender mailSender;
+
+
 
     //查询评论
     @GetMapping ("/comment")
@@ -68,8 +72,7 @@ public  Object  addComment(Comment comment, HttpSession session){
           comment.setNickname(user.getNickname());
           comment.setAvatar(user.getAvatar());
          comment.setAdministrator(true);
-      }else {
-          comment.setAvatar("/img/commentAvatar.png");
+      }else{
           comment.setAdministrator(false);
       }
       comment.setCreatetime(DateTimeFormatUtils.getDateTime(new Date(  )));
@@ -97,21 +100,20 @@ public  Object  addComment(Comment comment, HttpSession session){
         try {
             SimpleMailMessage message = new SimpleMailMessage( );
             Blog blog = blogServiceimpl.queryBlogById(comment.getBlogId( ));
-            String url="https://www.hsjhome.top/" +"toBlog/"+ blog.getId( );
-
+            String url=MailDataUtils.DOMAIN_NAME+"/toBlog/"+ blog.getId( );
             if (blog.getType().equals("2")){
-                url="https://www.hsjhome.top/toAbout";
+                url=MailDataUtils.DOMAIN_NAME+"/toAbout";
             }else if (blog.getType().equals("1")){
-                url="https://www.hsjhome.top/toLink";
+                url=MailDataUtils.DOMAIN_NAME+"/toLink";
             }
             if (comment.getExtendsCommentid( ) != null && comment.getExtendsCommentid( ) != 0) {
                 Comment ExtendsComment = commentService.queryAllById(comment.getExtendsCommentid( ));
                 // 发件人
-                message.setFrom("heshijiablog@163.com");
+                message.setFrom(MailDataUtils.MAIL_SENDER);
                 // 收件人
                 message.setTo(ExtendsComment.getEmail( ));
                 // 邮件标题
-                message.setSubject("来自Joe站点的新消息");
+                message.setSubject(MailDataUtils.MAIL_TITLE);
                 // 邮件内容
                 message.setText("评论人:" + comment.getNickname( ) +
                         "\n评论内容:" + comment.getContent( ) +
@@ -120,16 +122,16 @@ public  Object  addComment(Comment comment, HttpSession session){
                 mailSender.send(message);
             } else {
                 // 发件人
-                message.setFrom("heshijiablog@163.com");
-                // 收件人
-                message.setTo("1870562227@qq.com");
+                message.setFrom(MailDataUtils.MAIL_SENDER);
+                // 抄送人
+                message.setTo(MailDataUtils.MAIL_CC);
                 // 邮件标题
-                message.setSubject("Joe站点有新评论");
+                message.setSubject(MailDataUtils.MAIL_TITLE);
                 // 邮件内容
                 message.setText("评论人:" + comment.getNickname( ) +
                         "\n评论内容:" + comment.getContent( ) +
                         "\n文章:" + blog.getTitle( ) +
-                        "\n文章地址:" + url);
+                        "\n文章地址:<a href="+url+">"+url+"</a>" );
                 mailSender.send(message);
             }
             msg.setMessage(MsgCode.SUCCESS_CODE);
@@ -142,4 +144,35 @@ public  Object  addComment(Comment comment, HttpSession session){
         }
     }
 
+    /**
+     * 拉取qq头像和昵称
+     * @param qq
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/getQQInfo/{qq}")
+    public Msg qq(@PathVariable ("qq") String qq) {
+        Msg msg = new Msg( );
+        if (StringUtils.isEmpty(qq)) {
+            msg.setMessage("qq号为空");
+            msg.setCode("200");
+            return  msg ;
+        }
+        try {
+            HashMap resultMap = new HashMap<>(4);
+            QQ qqInfo = QQUtils.getQQInfo(Long.parseLong(qq));
+            resultMap.put("avatar",qqInfo.getAvatar());
+            resultMap.put("nickname",qqInfo.getName());
+            resultMap.put("email", qq + "@qq.com");
+            msg.setMessage("拉取qq信息成功");
+            msg.setCode("100");
+            msg.setHashMap(resultMap);
+        }catch (Exception e){
+            msg.setMessage("拉取qq信息失败");
+            msg.setCode("200");
+            return  msg ;
+        }
+        return msg;
+
+    }
 }

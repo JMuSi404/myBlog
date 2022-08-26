@@ -4,8 +4,8 @@ spring:
     druid:
       url: jdbc:mysql://localhost:3306/blog?useSSL=false&serverTimezone=GMT%2B8
       driver-class-name: com.mysql.cj.jdbc.Driver
-      username: 数据库账号
-      password: 数据库密码
+      username: #数据库账号
+      password: #数据库密码
 
 #视图解析器配置
   mvc:
@@ -23,9 +23,9 @@ spring:
 # 主机地址
     host: smtp.163.com
 # 邮箱名
-    username: 邮箱名
+    username:
 # 授权码（不是密码）
-    password: 授权码
+    password:
 # redis配置
   redis:
     host: 127.0.0.1
@@ -38,7 +38,7 @@ spring:
         max-idle: 10
         min-idle: 0
     timeout: 1000
-    password: redis密码
+    password: #redis密码
 
 #mybatis-plus配置
 mybatis-plus:
@@ -60,5 +60,10 @@ logging:
   file:
     path: log/blog/
 
-
+#邮件信息工具类 MailDataUtils (com.heshijia.myblog.web.controller.BlogcommentController.emailAlert 在这个评论邮件回复方法中有应用)
+myblog_mail:
+  domain_name:  #域名
+  mail_sender:  #邮件发送者
+  mail_cc:  #邮件抄送
+  mail_title: "来自Joe站点的新消息"  #邮件标题
 

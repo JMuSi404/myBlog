@@ -62,6 +62,14 @@
 					</div>
 					<div class="fields">
 						<div class="field h-mobile-wide h-margin-bottom-mini">
+							<div class="ui corner labeled input">
+								<div class="ui input focus" id="qq_input_box">
+									<img id="qq_avatar" class="ui avatar circular image" src="/img/commentAvatar.png" style="width: 2.5em;height: 2.5em;">
+									<input type="text"  id="Access_to_information_by_qq"  placeholder="填写QQ号自动拉取信息">
+								</div>
+							</div>
+						</div>
+						<div class="field h-mobile-wide h-margin-bottom-mini">
 							<div class="ui left icon input">
 								<i class="user icon"></i>
 								<input type="text" name="nickname" placeholder="请输入昵称(必填)" />
@@ -312,6 +320,28 @@
 				addComment();
 			}
 		});
+		/**
+		 * 根据qq号拉取信息
+		 */
+		$(document).on("blur","#Access_to_information_by_qq",function () {
+			let qq=$(this).val();
+			if (qq!=null&&qq!=''){
+				$.ajax({
+					url:"/getQQInfo/"+qq,
+					type:"GET",
+					success:function (data) {
+						if (data.code==100){
+							$("#qq_avatar").attr("src",data.hashMap.avatar);
+							$("[name='email']").val(data.hashMap.email);
+							$("[name='nickname']").val(data.hashMap.nickname);
+						}else {
+							$("#qq_avatar").attr("src","/img/commentAvatar.png");
+							console.log(data.message);
+						}
+					}
+				})
+			}
+		});
 
 		/**
 		 * 添加评论
@@ -325,7 +355,8 @@
 					"blogId":$("[name='BlogId']").val(),
 					"content":content,
 					"nickname":$("[name='nickname']").val(),
-					"email":$("[name='email']").val()
+					"email":$("[name='email']").val(),
+					"avatar":$("#qq_avatar").attr("src")
 				},
 				type:"POST",
 				success:function () {

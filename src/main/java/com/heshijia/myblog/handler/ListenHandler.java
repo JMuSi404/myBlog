@@ -49,7 +49,7 @@ public class ListenHandler {
     }
 
 
-    @Scheduled(cron = "*/15 * * * * ?")
+    @Scheduled(cron = "*/30 * * * * ?")
     public void updateNum() {
         log.info("周期任务开始执行...");
         Set<ZSetOperations.TypedTuple<String>> viewNum = redisUtil.zReverseRangeWithScores(VIEW_KEY, 0, 10);
