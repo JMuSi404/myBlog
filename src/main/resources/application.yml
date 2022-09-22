@@ -3,10 +3,10 @@
 spring:
   datasource:
     druid:
-      url: jdbc:mysql://localhost:3306/xxx?useSSL=false&serverTimezone=GMT%2B8
+      url: jdbc:mysql://localhost:3306/XXX?useSSL=false&serverTimezone=GMT%2B8
       driver-class-name: com.mysql.cj.jdbc.Driver
-      username: 数据库账号
-      password: 数据库密码
+      username: XXX 
+      password: XXX 
 
 #视图解析器配置
   mvc:
@@ -24,12 +24,12 @@ spring:
 #评论邮件回复配置
   mail:
     default-encoding: utf-8
-# 主机地址 163邮箱smtp.163.com,qq邮箱为 smtp.qq.com
-    host: xxxx
-#发送方邮件名
-    username: 邮箱名
+# 主机地址 163邮箱smtp.163.com,qq邮箱为smtp.qq.com
+    host: smtp.163.com
+#发送方邮箱名
+    username: XXXX@163.com
 # 授权码（不是密码）
-    password: 授权码
+    password: XXXXX 
 
 # redis配置
 #如果不会或者没有安装redis的,可以将这几行redis配置注释掉,然后在java代码中也需要注释掉一些代码,不然会报错,redis实现的只是一个博客浏览量功能而已
@@ -47,7 +47,8 @@ spring:
         max-idle: 10
         min-idle: 0
     timeout: 1000
-    password: redis密码
+ #redis密码,如果没设置可以注掉,建议设置下,不然容易被别人拿来挖矿
+    password: XXXX
 
 #mybatis-plus配置
 mybatis-plus:
@@ -71,13 +72,11 @@ logging:
 
 #邮件发送内容信息配置 (com.heshijia.myblog.utils.MailDataUtils)
 myblog_mail:
-  #域名 填你的域名
-  domain_name: xxx
+  #域名 
+  domain_name: http://www.XXXX.com
   #邮件发送者 为评论邮件回复配置的发送方邮件名
-  mail_sender: xxx
+  mail_sender: XXX@163.com
   #邮件抄送 所有邮件都抄送一份到抄送这个邮箱
-  mail_cc: xxx
+  mail_cc: XXX@163.com
   #邮件标题
   mail_title: '你有一条新消息'
-
-
