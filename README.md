@@ -1,7 +1,7 @@
 # Joeblog
-个人博客系统 SpringBoot+Mybatisplus
-\
-博客地址：https://hsjhome.top
+个人博客系统 SpringBoot(thymeleaf)+Mybatis
+
+博客地址：http://hsjhome.top
 ## 技术栈
 **1.前端**
  - JS框架：JQuery
